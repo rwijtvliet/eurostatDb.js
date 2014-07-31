@@ -369,16 +369,14 @@ function eurostatDb () {
     esDb.codeList = function(name, fldName) {return $.extend([], $.grep(getDsd(name).codelists, function(codelist){return codelist.name === fldName;})[0].codes);}; //Array of the names, and the meaning, of the codes that a field or dimension may take.
     esDb.dimensions = function(name) {return $.extend([], getDsd(name).dimensions);}; //Array of all the dimensions.
 
-    esDb.addTable = function (tblConfig, callback) {
-        var name = tblConfig.name,
-            dsd = getDsd(name),
+    esDb.addTable = function (name, fixDims, timePeriod, callback) {
+        var dsd = getDsd(name),
             tbl,
             i = tblIndex(name);
 
         if (!(dsd)) {
-            var tblConfigNew = $.extend(true, {}, tblConfig);//copy
             esDb.fetchDsd(name, function(){
-                esDb.addTable(tblConfigNew, callback)
+                esDb.addTable(name, fixDims, timePeriod, callback)
             });//retry to add table when dsd is fetched
             return;
         }
@@ -398,8 +396,8 @@ function eurostatDb () {
         //Dimensions: split into fixed and variable.
         tbl.dsd.dimensions.forEach(function(dim){
             if (dim === "TIME_PERIOD") return;//exclude dimension TIME_PERIOD from appearing anywhere (is added later)
-            if (tblConfig.hasOwnProperty("fixDims") && tblConfig.fixDims.hasOwnProperty(dim)) {
-                tbl.fixDims[dim] = tblConfig.fixDims[dim];
+            if (fixDims.hasOwnProperty(dim)) {
+                tbl.fixDims[dim] = fixDims[dim];
             } else {
                 tbl.varDims.push(dim);
             }
@@ -407,11 +405,11 @@ function eurostatDb () {
 
         //Time period: add to fixed dimensions.
         var period = "";
-        if (tblConfig.hasOwnProperty("timePeriod")){
-            if (!isNaN(tblConfig.timePeriod.startYear)) period = "startPeriod=" + tblConfig.timePeriod.startYear;
-            if (!isNaN(tblConfig.timePeriod.endYear)) {
+        if (timePeriod){
+            if (!isNaN(timePeriod.startYear)) period = "startPeriod=" + tblConfig.timePeriod.startYear;
+            if (!isNaN(timePeriod.endYear)) {
                 if (period) period += "&";
-                period += "endPeriod=" + tblConfig.timePeriod.endYear;
+                period += "endPeriod=" + timePeriod.endYear;
             }
             if (period) period = "/?" + period;
         }
@@ -437,14 +435,14 @@ function eurostatDb () {
     esDb.varDims = function(name) {return $.extend([], getTbl(name).varDims);}; //Array of variable dimensions in fetching data for a certain table.
     esDb.fixDims = function(name) {return $.extend([], getTbl(name).fixDims);}; //Object of fixed dimensions, and their values, for a certain table.
 
-    esDb.fetchData = function (dataConfig, callback) {
-        var tbl = getTbl(dataConfig.name),
-            filters = singlevalFilters(dataConfig.varDimFilter), //varDimFilter: single object with properties that are value arrays.
-                                                                 //filters: array of objects with properties that are single values.
+    esDb.fetchData = function (name, varDimFilter, callback) {
+        var tbl = getTbl(name),
+            filters = singlevalFilters(varDimFilter), //varDimFilter: single object with properties that are value arrays.
+                                                      //filters: array of objects with properties that are single values.
             fetchCount = 0;
         filters.forEach(function(filter){
             if (!(tbl.data(filter).count())) {
-                var url = dataUrl({name: tbl.name, varDimFilter: filter});
+                var url = dataUrl(tbl.name, filter);
                 fetchCount++;
                 $.ajax(url, {
                     success: function(xml) {
@@ -458,9 +456,9 @@ function eurostatDb () {
         if ((!fetchCount) && (typeof callback === "function")) callback(undefined);
         return esDb;
     };
-    function dataUrl (dataConfig) {
+    function dataUrl (name, varDimFilter) {
         //Returns URL to obtain dataset as defined in config object.
-        var tbl = getTbl(dataConfig.name),
+        var tbl = getTbl(name),
             url = "http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/" + tbl.name + "/",
             dimVals = [],
             dimString;
@@ -468,7 +466,7 @@ function eurostatDb () {
         tbl.dsd.dimensions.forEach(function(dimension){
             var dimVal;
             if (tbl.fixDims.hasOwnProperty(dimension)) dimVal = tbl.fixDims[dimension];
-            else if (dataConfig.varDimFilter.hasOwnProperty(dimension)) dimVal = dataConfig.varDimFilter[dimension];
+            else if (varDimFilter.hasOwnProperty(dimension)) dimVal = varDimFilter[dimension];
             else throw "A value for the dimension '" + dimension + "' is needed according to the 'dimensions' property of the table definition. However, a value was not given by the user and also not by the fixedDimensions of the table definition.";
             if (!(dimVal instanceof Array)) dimVal = [dimVal];//increase robustness, in case of only one value that's not put in 1-element array.
             dimVals.push(dimVal);
@@ -520,12 +518,10 @@ function eurostatDb () {
         return newData;
     }
 
-    esDb.getRst = function (rstConfig, callback) {
+    esDb.getRst = function (name, fieldFilter, callback) {
         //Get recordset that is described with rstConfig object. Download data that is not available yet.
-        var tbl = getTbl(rstConfig.name),
-            fields = tbl.fields,//fields that are allowed (but must not all be present)
-            filter = rstConfig.fieldFilter;
-        for (var fieldName in filter) {if (fields.indexOf(fieldName) === -1) throw "Unknown fieldname '" + fieldName + "' present in filter.";}
+        var tbl = getTbl(name);
+        for (var fieldName in fieldFilter) {if (tbl.fields.indexOf(fieldName) === -1) throw "Unknown fieldname '" + fieldName + "' present in filter.";}
         //TODO: download data that is not available
         //TODO: run callback
         //TODO: return esDb
