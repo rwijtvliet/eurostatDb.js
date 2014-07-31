@@ -106,7 +106,19 @@ db.fields("demo_pjan");
 
 
 
-//If I already know what dataflow I want, and which of its fields I'm interested in, I can shorten things:
+//If I already know exactly what data I'm interacting with, I might do something like this:
+db = eurostatDb();
+db.addTable({name: "demo_pjan", fixDims: {FREQ: "A", AGE: "TOTAL"}, timePeriod: {startYear: 2000, endYear: 2010}}, function () {
+    db.fetchData({name: "demo_pjan", varDimFilter: {SEX:["T", "M", "F"], GEO:["EU28"]}});   //total, male, and female population of EU28.
+    db.fetchData({name: "demo_pjan", varDimFilter: {SEX:["T"], GEO:["BE", "NL", "LU"]}});   //total population of Belgium, Netherlands, and Luxembourg.
+});
+//The first line specifies the name of the dataflow that I'm interested in, and fixes some of its dimensions and the time period.
+//The second and third line then fetch and store some specific data.
+
+
+
+
+
 db.addTable({name: "demo_pjan", fixDims: {FREQ: "A", AGE: "TOTAL"}, timePeriod: {startYear: 2000, endYear: 2010}}, function (tbl) {
     console.log(JSON.stringify(tbl, null, 4));
 });
