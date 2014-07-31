@@ -9,7 +9,7 @@ Eurostat provides a wealth of information -- it's just pretty hard to get to and
 Usage 
 -----
 
-##In short
+###In short
 If I already know exactly what data I'm interacting with, I might do something like this:
 ```js
 db = eurostatDb();
