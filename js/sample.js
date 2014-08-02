@@ -1,6 +1,32 @@
+
+//In short:
+db = eurostatDb();
+db.addTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 2000, endYear: 2015}, function () {//1
+    db.fetchData("demo_pjan", {SEX:["T", "M", "F"], GEO:["NL", "BE", "LU"]}, function () {//2
+        var data = db.getRst("demo_pjan", {SEX:"T", GEO:"NL"}, "TIME asec"); //3
+
+        $("div#info").append("<h2>Total population in the Netherlands:</h2>");
+        data.forEach(function(d) {$("div#info").append("<p>In " + d.TIME + ": " + d.OBS_VALUE + "</p>");}); //4
+    });
+});
+//What's happening here?
+//1: Create a table for the dataflow "demo_pjan".
+//   Fix the dimensions "FREQ" and "AGE" so that we always fetch annual data and age aggregates.
+//   Also fix the time period to always fetch data between 2000 and 2015.
+//2: Fetch "demo_pjan" data for total, male, and female population of BeNeLux countries.
+//3: Get record set that has 'total' population for Netherlands, ordered by ascending year.
+//4: Make a list of the values that were found.
+
+
+
+
+
+
 //Example 1: no prior knowledge
 //  I'm trying to get and use population data. How do I go about it?
+/*
 var db = eurostatDb();
+
 
 //  1.1: Get names and descriptions of relevant dataflows.
 //  First, I get a list of dataflows that could be relevant, by searching for "population".
@@ -33,7 +59,7 @@ db.fetchDfs("population", function (dfs) {
 //  1.2: Get data structure definition of a certain dataflow.
 //  Dataflow "demo_pjan" sound like it might fit my needs. Let's see how its data structure is defined.
 db.fetchDsd("demo_pjan", function (dsd) {
-    console.log(JSON.stringify(dsd, null, 2));
+    console.log(JSON.stringify(dsd));
 });
 //  This outputs:
 //{
@@ -53,8 +79,8 @@ db.fetchDsd("demo_pjan", function (dsd) {
 
 //  1.3: Add table to hold data.
 //  Let's prepare a table that doesn't 'fix' any dimension.
-db.addTable({name: "demo_pjan"}, function (tbl) {
-    console.log(JSON.stringify(tbl, null, 4));
+db.addTable("demo_pjan", {}, {}, function (tbl) {
+    console.log(JSON.stringify(tbl));
 });
 //  This outputs the table:
 //{
@@ -64,14 +90,14 @@ db.addTable({name: "demo_pjan"}, function (tbl) {
 //    "fields": ["FREQ", "AGE", "SEX", "GEO", "TIME", "INDICATORS", "OBS_VALUE", "OBS_STATUS", "OBS_FLAG"],
 //    "dsd": {...}
 //}
-//  It shows me which fields might all be present in the data that is fetched.
+//  It shows, which fields might all be present in the data that is fetched.
 //  It also shows which are the 'variable dimensions' for which I need to specify values, in order to fetch data.
 
 
 //  1.4: Fetch data.
 //  I'd like to add the annual population data for France and Germany, of all ages, for both males and females.
-db.fetchData({name: "demo_pjan", varDimFilter: {FREQ:["A"], GEO:["FR", "DE"], AGE:["TOTAL"], SEX:["M", "F"]}}, function (record) {
-    console.log(JSON.stringify(record, null, 2));
+db.fetchData("demo_pjan", {FREQ:["A"], GEO:["FR", "DE"], AGE:["TOTAL"], SEX:["M", "F"]}, function (record) {
+    console.log(JSON.stringify(record));
 });
 //  This outputs a few arrays like this:
 //[
@@ -84,7 +110,7 @@ db.fetchData({name: "demo_pjan", varDimFilter: {FREQ:["A"], GEO:["FR", "DE"], AG
 
 //  1.5: Use data.
 //  Finally, I'd like to use this data, for example to display in a table.
-db.getRst({name: "demo_pjan", fieldFilter: {""}})//TODO
+/*db.getRst("demo_pjan", {})//TODO
 
 
 
@@ -107,14 +133,14 @@ db.fields("demo_pjan");
 
 
 //If I already know exactly what data I'm interacting with, I might do something like this:
+//
 db = eurostatDb();
-db.addTable({name: "demo_pjan", fixDims: {FREQ: "A", AGE: "TOTAL"}, timePeriod: {startYear: 2000, endYear: 2010}}, function () {
-    db.fetchData({name: "demo_pjan", varDimFilter: {SEX:["T", "M", "F"], GEO:["EU28"]}});   //total, male, and female population of EU28.
-    db.fetchData({name: "demo_pjan", varDimFilter: {SEX:["T"], GEO:["BE", "NL", "LU"]}});   //total population of Belgium, Netherlands, and Luxembourg.
+db.addTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 2000, endYear: 2010}, function () {
+    db.fetchData("demo_pjan", {SEX:["T", "M", "F"], GEO:["EU28"]});   //total, male, and female population of EU28.
+    db.fetchData("demo_pjan", {SEX:["T"], GEO:["BE", "NL", "LU"]});   //total population of Belgium, Netherlands, and Luxembourg.
 });
 //The first line specifies the name of the dataflow that I'm interested in, and fixes some of its dimensions and the time period.
 //The second and third line then fetch and store some specific data.
-
 
 
 
@@ -127,7 +153,8 @@ db.addTable({name: "demo_pjan", fixDims: {FREQ: "A", AGE: "TOTAL"}, timePeriod: 
 //The output:
 //{
 //    "name": "demo_pjan",
-//    "fixDims": {"FREQ": "A", "AGE": "TOTAL", "TIME_PERIOD": "/?startPeriod=2000&endPeriod=2010"},
+//    "fixDims": ["FREQ", "AGE", "TIME_PERIOD"],
+//    "fixDimFilter": {"FREQ": "A", "AGE": "TOTAL", "TIME_PERIOD": "/?startPeriod=2000&endPeriod=2010"},
 //    "varDims": ["SEX", "GEO"],
 //    "fields":  ["SEX", "GEO", "TIME", "INDICATORS", "OBS_VALUE", "OBS_STATUS", "OBS_FLAG"],
 //    "dsd": { "name": "demo_pjan",
@@ -143,11 +170,7 @@ db.addTable({name: "demo_pjan", fixDims: {FREQ: "A", AGE: "TOTAL"}, timePeriod: 
 //        ]
 //    }
 //}
-//I also already know what data I'd like to fetch. I'll do it correct this time and put the data fetch call as the callback of the table initialisation:
-db.addTable({name: "demo_pjan", fixDims: {FREQ: "A", AGE: "TOTAL"}, timePeriod: {startYear: 2000, endYear: 2010}}, function () {
-    db.fetchData({name: "demo_pjan", varDimFilter: {SEX:["T", "M", "F"], GEO:["EU28"]}});   //total, male, and female population of EU 28.
-    db.fetchData({name: "demo_pjan", varDimFilter: {SEX:["T"], GEO:["BE", "NL", "LU"]}});   //total population of Belgium, Netherlands, and Luxembourg.
-});
+
 
 
 
