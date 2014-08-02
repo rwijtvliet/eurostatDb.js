@@ -82,7 +82,7 @@ Dataflow "demo_pjan" sounds like it might fit my needs. Let's see how its data i
 var structure;
 db.fetchDsd("demo_pjan", function (dsd) {structure = dsd;});
 ```
-which, after a few moments, puts the following object into variable ```structure```:
+which, after a few moments, sets the variable ```structure``` to the following object:
 ```js
 {
       name:"demo_pjan",
@@ -98,8 +98,10 @@ which, after a few moments, puts the following object into variable ```structure
       ]
 }
 ```
-Here, the ```dimensions``` property describes the "dimensions" for which values are needed in order to fetch data, and the ```concepts``` property describes the fields that might be present in that data.
+Here, the ```dimensions``` property describes the fields for which values are needed in order to fetch data, and the ```concepts``` property describes the fields that might be present in that data.
 Think of the ```dimensions``` as the input array, and the ```concepts``` as the output array. As we'll see in the next step, however, we don't need to specify the values of all input array elements each time we fetch data. Instead, we can "fix" some dimensions which are always the same.
+
+The final property, ```codelists```, describes the values that the dimensions can be given when fetching data. In order to make it easier using them, there is a method ```.codeListDict``` that returns a dictionary object with code:description pairs, like so: ```js db.codeListDict("demo_pjan", "SEX");```, which returns ```js {T:"Total",M:"Males",F:"Females"}```.
 
 
 ####Step 3: Initialise local table
@@ -122,7 +124,7 @@ After this, the value of ```myTbl``` is:
 Notice how the elements in the ```dimensions``` property of the DSD, above, have been divided over the properties ```fixDims``` and ```varDims```. The latter shows the "variable dimensions" for which I need to specify values every time I want to fetch data. The ```fields``` property describes the fields that might be stored in the table. Compare with the ```concepts``` property of the DSD.<br><br>
 
 
-Before we continue, let's see what is different, if I know upfront that I'm only ever interested in the annual data, aggregated over ages, after the year 2000. In that case, I use two additional arguments:
+Before we continue, let's see what is different, if I know upfront that I'm only ever interested in the annual data, aggregated over ages, after the year 2000. In that case, I use two additional arguments in calling the function:
 ```js
 var myTbl;
 db.addTable("demo_pjan", {FREQ:"A", AGE:"TOTAL"}, {startYear:2000}, function (tbl) {myTbl = tbl;});
@@ -141,22 +143,11 @@ And ```myTbl``` equals:
 Notice how, compared to the previous table, this one has 2 elements less in the ```varDims``` array: in order to fetch data for this table, I no longer need to specify the values for the ```FREQ``` and ```AGE``` dimensions every time -- as they are fixed and known. This is also why the same 2 elements are missing from the ```fields``` array: they are no longer stored in every record in the database.
 
 
+
 ####Step 4: Fetch data
-I decide I'm not interested in age distribution, that annual data suffices, and that data from the last millennium do not interest me either, and so I stick to the latter table definition. 
-Now, I want to make a comparison between the number of inhabitants of several countries. In order to get this data, I need to specify the values for the ```varDims``` elements, so in this case 
-```SEX``` and ```GEO```. <br>
+I decide I'm not interested in age distribution, that annual data suffices, and that data from the last millennium do not interest me either, and so I stick to the latter table definition. Now, I want to make a comparison between the number of inhabitants of several countries. In order to get this data, I need to specify the values for the ```varDims``` elements, so in this case  ```SEX``` and ```GEO```. <br>
 <br>
-Short intermezzo: how do I even know what values I can pick? For this, there is a method: .codeListDict, used like this:
-```js
-db.codeListDict("demo_pjan", "SEX");
-```
-which returns
-```js
-{T:"Total",M:"Males",F:"Females"}
-```
-<br>
-<br>
-Back to fetching data. I'll get the data for Germany and France this time, and I might just as well get the numbers for male, female, and total. In the console:
+I decide to get the data for Germany and France this time, and I might just as well get the numbers for male, female, and total. In the console:
 ```js
 db.fetchData("demo_pjan", {GEO:["FR", "DE"], SEX:["T", "M", "F"]});
 ```
@@ -180,6 +171,7 @@ Hmmm... I wonder what that ```"p"``` value means on the 2013 record...
 ```js
 db.codeListDict("demo_pjan", "OBS_FLAG")["p"]
 ```
+returns
 ```js
 "provisional value"
 ```
