@@ -101,7 +101,11 @@ which, after a few moments, sets the variable ```structure``` to the following o
 Here, the ```dimensions``` property describes the fields for which values are needed in order to fetch data, and the ```concepts``` property describes the fields that might be present in that data.
 Think of the ```dimensions``` as the input array, and the ```concepts``` as the output array. As we'll see in the next step, however, we don't need to specify the values of all input array elements each time we fetch data. Instead, we can "fix" some dimensions which are always the same.
 
-The final property, ```codelists```, describes the values that the dimensions can be given when fetching data. In order to make it easier using them, there is a method ```.codeListDict``` that returns a dictionary object with code:description pairs, like so: ```js db.codeListDict("demo_pjan", "SEX");```, which returns ```js {T:"Total",M:"Males",F:"Females"}```.
+The final property, ```codelists```, describes the values that the dimensions can be given when fetching data. In order to make it easier using them, there is a method ```.codeListDict``` that returns a dictionary object with code:description pairs, like so: 
+```js 
+db.codeListDict("demo_pjan", "SEX");
+```
+which returns ```{T:"Total",M:"Males",F:"Females"}```.
 
 
 ####Step 3: Initialise local table
