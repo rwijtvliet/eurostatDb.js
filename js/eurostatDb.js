@@ -414,7 +414,7 @@ function eurostatDb () {
     esDb.varDims = function(name) {return $.extend([], getTbl(name).varDims);}; //Array of variable dimensions in fetching data for a certain table.
     esDb.fixDimFilter = function(name) {return $.extend([], getTbl(name).fixDimFilter);}; //Object of fixed dimensions, and their values, for a certain table.
 
-    esDb.fetchData = function (name, varDimFilters, callback) {
+    esDb.fetchData = function (name, varDimFilters, callbacks) {
         var callbackOften,
             callbackOnce;
         if (arguments.length === 3) callbackOnce = arguments[2]; //if one callback, it is callbackOnce.

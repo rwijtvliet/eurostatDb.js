@@ -2,7 +2,7 @@
 //In short:
 db = eurostatDb();
 db.addTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 2000, endYear: 2015}, function () {//1
-    db.fetchData("demo_pjan", {SEX:["T", "M", "F"], GEO:["NL", "BE", "LU"]}, function () {//2
+    db.fetchData("demo_pjan", {SEX:["T", "M", "F"], GEO:["FR", "NL", "BE", "LU"]}, function () {//2
         var data = db.getRst("demo_pjan", {SEX:"T", GEO:"NL"}, "TIME asec"); //3
 
         $("div#info").append("<h2>Total population in the Netherlands:</h2>");
@@ -211,3 +211,7 @@ function bla2(name) {
     });
 
 }*/
+
+
+//db.addTable("demo_pjan", {FREQ:"A", AGE:"TOTAL"}, {startYear:2000}, function (tbl) {console.log(JSON.stringify(tbl));});
+
