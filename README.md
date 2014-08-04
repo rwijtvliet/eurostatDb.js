@@ -14,7 +14,7 @@ If I already know exactly what data I'm interacting with, I might do something l
 
 ```js
 db = eurostatDb();
-db.addTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015}, function () {//1
+db.initTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015}, function () {//1
     db.fetchRst("demo_pjan", {SEX: "T", GEO:"NL", OBS_VALUE:{gt:16e6}}, function (error, rst) {//2
 
         $("div#info").append("<h2>Total population in the Netherlands (years with >16 million):</h2>");
