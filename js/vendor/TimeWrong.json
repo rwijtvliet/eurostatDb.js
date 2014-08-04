@@ -1,0 +1,2034 @@
+[
+    {
+        "name": "DS-008573",
+        "dimensions": ["FREQ", "DECLARANT", "PRCCODE", "MEASUREMENT_UNIT", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-022469",
+        "dimensions": ["FREQ", "REPORTER", "PARTNER", "PRODUCT", "FLOW", "TRANSPORT_MODE", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-032655",
+        "dimensions": ["FREQ", "REPORTER", "PARTNER", "PRODUCT", "FLOW", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-016894",
+        "dimensions": ["FREQ", "REPORTER", "PARTNER", "PRODUCT", "FLOW", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-018995",
+        "dimensions": ["FREQ", "REPORTER", "PARTNER", "PRODUCT", "FLOW", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-041719",
+        "dimensions": ["FREQ", "DECLARANT", "PARTNER", "PRODUCT", "STAT_REGIME", "ELIGIBILITY", "IMPORT_REGIME", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-016893",
+        "dimensions": ["FREQ", "REPORTER", "PARTNER", "PRODUCT", "FLOW", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-041718",
+        "dimensions": ["FREQ", "DECLARANT", "PARTNER", "PRODUCT", "STAT_REGIME", "ELIGIBILITY", "IMPORT_REGIME", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-043327",
+        "dimensions": ["FREQ", "REPORTER", "PARTNER", "PRODUCT", "FLOW", "TRANSPORT_MODE", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-043227",
+        "dimensions": ["FREQ", "REPORTER", "PARTNER", "PRODUCT", "FLOW", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-043328",
+        "dimensions": ["FREQ", "REPORTER", "PARTNER", "PRODUCT", "FLOW", "TRANSPORT_MODE", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-043409",
+        "dimensions": ["FREQ", "DECLARANT", "PRCCODE", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-066342",
+        "dimensions": ["FREQ", "DECL", "TIME_PERIOD", "PRCCODE", "INDICATORS"]
+    },
+    {
+        "name": "aact_eaa04",
+        "dimensions": ["FREQ", "BASEYEAR", "GEO", "TIME_PERIOD", "INDIC_AG", "ITM_NEWA", "UNIT"]
+    },
+    {
+        "name": "DS-043408",
+        "dimensions": ["FREQ", "DECLARANT", "PRCCODE", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-066341",
+        "dimensions": ["FREQ", "DECL", "TIME_PERIOD", "PRCCODE", "INDICATORS"]
+    },
+    {
+        "name": "acf_p_ch",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "INDIC_BT", "ENTERPR", "NACE_R2", "GEO", "CHANGE"]
+    },
+    {
+        "name": "acf_p_fa",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "ENTERPR", "NACE_R2", "GEO", "REASON"]
+    },
+    {
+        "name": "acf_p_fi",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "ENTERPR", "NACE_R2", "GEO", "FIN_TYP"]
+    },
+    {
+        "name": "acf_p_ne",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "ENTERPR", "NACE_R2", "GEO", "YES_NO"]
+    },
+    {
+        "name": "acf_p_pu",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "ENTERPR", "NACE_R2", "GEO", "REASON"]
+    },
+    {
+        "name": "acf_p_so",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "ENTERPR", "NACE_R2", "GEO", "FIN_SOURCE"]
+    },
+    {
+        "name": "aei_ps_inp",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "INDIC_AG", "FARMTYPE", "UNIT"]
+    },
+    {
+        "name": "DS-041691",
+        "dimensions": ["FREQ", "DECLARANT", "PARTNER", "PRODUCT", "STAT_REGIME", "ELIGIBILITY", "IMPORT_REGIME", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "DS-016890",
+        "dimensions": ["FREQ", "REPORTER", "PARTNER", "PRODUCT", "FLOW", "TIME_PERIOD", "INDICATORS"]
+    },
+    {
+        "name": "bd_9pm_r2",
+        "dimensions": ["FREQ", "INDIC_SB", "NACE_R2", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "bd_enace2_r3",
+        "dimensions": ["FREQ", "INDIC_SB", "NACE_R2", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "bd_esize_r3",
+        "dimensions": ["FREQ", "INDIC_SB", "SIZECLAS", "NACE_R2", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "bd_hgnace2_r3",
+        "dimensions": ["FREQ", "INDIC_SB", "NACE_R2", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "bd_size_r3",
+        "dimensions": ["FREQ", "INDIC_SB", "SIZECLAS", "NACE_R2", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "cens_91actz",
+        "dimensions": ["FREQ", "AGE", "CITIZEN", "SEX", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "demo_pjanmarsta",
+        "dimensions": ["FREQ", "SEX", "AGE", "GEO", "TIME_PERIOD", "MARSTA"]
+    },
+    {
+        "name": "earn_ses06_01",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "CPAYAGR", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_03",
+        "dimensions": ["FREQ", "SIZECLAS", "AGE", "ISCO88", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_02",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "AGE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_05",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "L_SERV", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_04",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "ISCED97", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_12",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "CPAYAGR", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_13",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "AGE", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_14",
+        "dimensions": ["FREQ", "SIZECLAS", "AGE", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_15",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "TYPE_CON", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_17",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "L_SERV", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_16",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "ISCED97", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_18",
+        "dimensions": ["FREQ", "SIZECLAS", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_19",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "CPAYAGR", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_20",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "AGE", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_21",
+        "dimensions": ["FREQ", "SIZECLAS", "AGE", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_22",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "TYPE_CON", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_23",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "ISCED97", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_24",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "L_SERV", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_25",
+        "dimensions": ["FREQ", "SIZECLAS", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_26",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "CPAYAGR", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_27",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "AGE", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_28",
+        "dimensions": ["FREQ", "SIZECLAS", "AGE", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_29",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "TYPE_CON", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_30",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "ISCED97", "UNIT", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_31",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "UNIT", "L_SERV", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_32",
+        "dimensions": ["FREQ", "SIZECLAS", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_33",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "CPAYAGR", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_34",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "AGE", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_35",
+        "dimensions": ["FREQ", "SIZECLAS", "AGE", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_36",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "TYPE_CON", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_37",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "ISCED97", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_39",
+        "dimensions": ["FREQ", "SIZECLAS", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_38",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "L_SERV", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_40",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "CPAYAGR", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_41",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "AGE", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_42",
+        "dimensions": ["FREQ", "SIZECLAS", "AGE", "ISCO88", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_43",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "TYPE_CON", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_44",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "ISCED97", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_45",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "L_SERV", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_46",
+        "dimensions": ["FREQ", "SIZECLAS", "ISCO88", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_47",
+        "dimensions": ["FREQ", "UNIT", "INDIC_SE", "NACE_R1", "SIZECLAS", "ISCO88", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_48",
+        "dimensions": ["FREQ", "UNIT", "INDIC_SE", "NACE_R1", "SIZECLAS", "ISCO88", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_50",
+        "dimensions": ["FREQ", "INDIC_SE", "NACE_R1", "SIZECLAS", "ISCO88", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_49",
+        "dimensions": ["FREQ", "UNIT", "INDIC_SE", "NACE_R1", "SIZECLAS", "ISCO88", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_51",
+        "dimensions": ["FREQ", "UNIT", "NACE_R1", "SIZECLAS", "ISCO88", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_52",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "TYPE_CON", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_53",
+        "dimensions": ["FREQ", "SIZECLAS", "ISCO88", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_rann",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT"]
+    },
+    {
+        "name": "earn_ses06_54",
+        "dimensions": ["FREQ", "NACE_R1", "SIZECLAS", "ISCO88", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses06_rbns",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "NACE_R1"]
+    },
+    {
+        "name": "earn_ses06_rhr",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "earn_ses_agt02",
+        "dimensions": ["FREQ", "NACE_R1", "AGE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt01",
+        "dimensions": ["FREQ", "NACE_R1", "CPAYAGR", "TYPE_CON", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt03",
+        "dimensions": ["FREQ", "SIZECLAS", "ISCO88", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt04",
+        "dimensions": ["FREQ", "NACE_R1", "ISCED97", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt06",
+        "dimensions": ["FREQ", "NACE_R1", "OWNER", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt05",
+        "dimensions": ["FREQ", "NACE_R1", "L_SERV", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt13",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "AGE", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt12",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "CPAYAGR", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt14",
+        "dimensions": ["FREQ", "AGE", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt15",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "TYPE_CON", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt17",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "L_SERV", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt16",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "ISCED97", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt18",
+        "dimensions": ["FREQ", "SIZECLAS", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt19",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "CPAYAGR", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt20",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "AGE", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt21",
+        "dimensions": ["FREQ", "AGE", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt22",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "TYPE_CON", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt23",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "ISCED97", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt24",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "L_SERV", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt25",
+        "dimensions": ["FREQ", "SIZECLAS", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt26",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "CPAYAGR", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt27",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "AGE", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt28",
+        "dimensions": ["FREQ", "AGE", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt29",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "TYPE_CON", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt30",
+        "dimensions": ["FREQ", "NACE_R1", "ISCED97", "UNIT", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt31",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "L_SERV", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt35",
+        "dimensions": ["FREQ", "AGE", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt32",
+        "dimensions": ["FREQ", "SIZECLAS", "UNIT", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt33",
+        "dimensions": ["FREQ", "NACE_R1", "CPAYAGR", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt34",
+        "dimensions": ["FREQ", "NACE_R1", "AGE", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt37",
+        "dimensions": ["FREQ", "NACE_R1", "ISCED97", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt36",
+        "dimensions": ["FREQ", "NACE_R1", "UNIT", "TYPE_CON", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt39",
+        "dimensions": ["FREQ", "SIZECLAS", "ISCO88", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt38",
+        "dimensions": ["FREQ", "NACE_R1", "L_SERV", "INDIC_SE", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt40",
+        "dimensions": ["FREQ", "NACE_R1", "CPAYAGR", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt41",
+        "dimensions": ["FREQ", "NACE_R1", "AGE", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt42",
+        "dimensions": ["FREQ", "AGE", "ISCO88", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt46",
+        "dimensions": ["FREQ", "SIZECLAS", "ISCO88", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt43",
+        "dimensions": ["FREQ", "NACE_R1", "TYPE_CON", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt44",
+        "dimensions": ["FREQ", "NACE_R1", "ISCED97", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "earn_ses_agt45",
+        "dimensions": ["FREQ", "NACE_R1", "L_SERV", "UNIT", "TIME_PERIOD", "GEO", "SEX"]
+    },
+    {
+        "name": "edat_aes_l32",
+        "dimensions": ["FREQ", "GEO", "UNIT", "TIME_PERIOD", "LEV_KNOW", "AGE"]
+    },
+    {
+        "name": "edat_aes_l31",
+        "dimensions": ["FREQ", "GEO", "UNIT", "TIME_PERIOD", "LEV_KNOW", "SEX"]
+    },
+    {
+        "name": "edat_aes_l33",
+        "dimensions": ["FREQ", "GEO", "UNIT", "TIME_PERIOD", "LEV_KNOW", "ISCED97"]
+    },
+    {
+        "name": "edat_aes_l34",
+        "dimensions": ["FREQ", "GEO", "UNIT", "TIME_PERIOD", "LEV_KNOW", "WSTATUS"]
+    },
+    {
+        "name": "edat_aes_l35",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT", "LEV_KNOW", "ISCO08"]
+    },
+    {
+        "name": "edat_aes_l36",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT", "LEV_KNOW", "DEG_URB"]
+    },
+    {
+        "name": "edat_aes_l51",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT", "LEV_KNOW", "SEX"]
+    },
+    {
+        "name": "edat_aes_l52",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT", "LEV_KNOW", "AGE"]
+    },
+    {
+        "name": "edat_aes_l53",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT", "LEV_KNOW", "ISCED97"]
+    },
+    {
+        "name": "edat_aes_l54",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT", "LEV_KNOW", "WSTATUS"]
+    },
+    {
+        "name": "edat_aes_l55",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT", "LEV_KNOW", "ISCO08"]
+    },
+    {
+        "name": "edat_aes_l56",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT", "LEV_KNOW", "DEG_URB"]
+    },
+    {
+        "name": "edat_lfse_16",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "AGE"]
+    },
+    {
+        "name": "env_ac_egss1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "NACE_R2", "ENV_DOM", "INDIC_PI", "UNIT", "TY"]
+    },
+    {
+        "name": "env_ac_egss2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "NACE_R2", "ENV_DOM", "INDIC_PI", "UNIT", "TY"]
+    },
+    {
+        "name": "env_rfec",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_rwas_cov",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_rwas_gen",
+        "dimensions": ["FREQ", "WST_OPER", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_wat_abs",
+        "dimensions": ["FREQ", "WAT_PROC", "WAT_SRC", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_wat_bal",
+        "dimensions": ["FREQ", "WAT_PROC", "WAT_SRC", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_wat_cat",
+        "dimensions": ["FREQ", "WAT_PROC", "NACE_R2", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_wat_pop",
+        "dimensions": ["FREQ", "WAT_PROC", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_wat_ind",
+        "dimensions": ["FREQ", "WAT_PROC", "NACE_R2", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_wat_res",
+        "dimensions": ["FREQ", "WAT_PROC", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_wat_use",
+        "dimensions": ["FREQ", "WAT_PROC", "WAT_SRC", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_ww_con",
+        "dimensions": ["FREQ", "WW_TP", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_ww_cap",
+        "dimensions": ["FREQ", "WW_TPAR", "WW_TP", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_ww_genv",
+        "dimensions": ["FREQ", "WW_GTD", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_ww_genp",
+        "dimensions": ["FREQ", "WW_GTD", "SUBSTANCE", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_ww_plt",
+        "dimensions": ["FREQ", "WW_TPAR", "WW_TP", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "env_ww_spd",
+        "dimensions": ["FREQ", "WW_TPAR", "WW_TP", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "gba_fundmod",
+        "dimensions": ["FREQ", "NABS07", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "gba_nabste",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "gba_tncoor",
+        "dimensions": ["FREQ", "NABS07", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "hlth_db_emacag",
+        "dimensions": ["FREQ", "TIME_PERIOD", "WSTATUS", "SEX", "AGE", "GEO"]
+    },
+    {
+        "name": "hlth_db_emasne",
+        "dimensions": ["FREQ", "TIME_PERIOD", "YES_NO", "SEX", "GEO"]
+    },
+    {
+        "name": "hlth_db_emacse",
+        "dimensions": ["FREQ", "TIME_PERIOD", "WSTATUS", "LEVELS", "SEX", "AGE", "GEO"]
+    },
+    {
+        "name": "hlth_db_emasnt",
+        "dimensions": ["FREQ", "TIME_PERIOD", "TYPASSWK", "SEX", "GEO"]
+    },
+    {
+        "name": "hlth_db_emaspr",
+        "dimensions": ["FREQ", "TIME_PERIOD", "YES_NO", "SEX", "GEO"]
+    },
+    {
+        "name": "hlth_db_emaspt",
+        "dimensions": ["FREQ", "TIME_PERIOD", "TYPASSWK", "SEX", "GEO"]
+    },
+    {
+        "name": "hlth_db_emcana",
+        "dimensions": ["FREQ", "TIME_PERIOD", "NACE_R1", "SEX", "HP_CAUSE", "GEO"]
+    },
+    {
+        "name": "hlth_db_emduca",
+        "dimensions": ["FREQ", "TIME_PERIOD", "DURATION", "SEX", "HP_CAUSE", "GEO"]
+    },
+    {
+        "name": "hlth_db_emedag",
+        "dimensions": ["FREQ", "TIME_PERIOD", "ISCED97", "SEX", "AGE", "GEO"]
+    },
+    {
+        "name": "hlth_db_emmaag",
+        "dimensions": ["FREQ", "TIME_PERIOD", "MARSTA", "SEX", "AGE", "GEO"]
+    },
+    {
+        "name": "hlth_db_emnaag",
+        "dimensions": ["FREQ", "TIME_PERIOD", "NACE_R1", "SEX", "AGE", "GEO"]
+    },
+    {
+        "name": "hlth_db_emocag",
+        "dimensions": ["FREQ", "TIME_PERIOD", "ISCO88", "SEX", "AGE", "GEO"]
+    },
+    {
+        "name": "hlth_db_emseag",
+        "dimensions": ["FREQ", "TIME_PERIOD", "LEVELS", "SEX", "AGE", "GEO"]
+    },
+    {
+        "name": "hlth_db_emrena",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "hlth_db_emtyag",
+        "dimensions": ["FREQ", "TIME_PERIOD", "TYPHPBDI", "SEX", "AGE", "GEO"]
+    },
+    {
+        "name": "hlth_ehis_de1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "BMI", "SEX", "AGE", "GEO", "ISCED97"]
+    },
+    {
+        "name": "hlth_ehis_de2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "BMI", "SEX", "AGE", "QUANTILE", "GEO"]
+    },
+    {
+        "name": "hlth_ehis_de3",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "GEO", "ISCED97"]
+    },
+    {
+        "name": "hlth_ehis_de4",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "GEO", "QUANTILE"]
+    },
+    {
+        "name": "hlth_ehis_de5",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "SMOKING", "GEO", "ISCED97"]
+    },
+    {
+        "name": "hlth_ehis_de6",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "GEO", "ISCED97", "FREQUENC"]
+    },
+    {
+        "name": "hlth_ehis_de9",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "ISCED97", "GEO"]
+    },
+    {
+        "name": "hlth_ehis_de7",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "FREQUENC", "ISCED97", "GEO"]
+    },
+    {
+        "name": "hlth_ehis_de8",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "FREQUENC", "ISCED97", "GEO"]
+    },
+    {
+        "name": "hlth_ehis_hc1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "GEO", "ISCED97"]
+    },
+    {
+        "name": "hlth_ehis_hc2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "ISCED97", "DURATION", "GEO"]
+    },
+    {
+        "name": "hlth_ehis_hc3",
+        "dimensions": ["FREQ", "TIME_PERIOD", "ISCED97", "DURATION", "GEO"]
+    },
+    {
+        "name": "hlth_ehis_hc4",
+        "dimensions": ["FREQ", "TIME_PERIOD", "ISCED97", "DURATION", "GEO", "SEX"]
+    },
+    {
+        "name": "hlth_ehis_hc5",
+        "dimensions": ["FREQ", "TIME_PERIOD", "AGE", "ISCED97", "N_CONTACT", "STAFF", "GEO", "SEX"]
+    },
+    {
+        "name": "hlth_ehis_hc7",
+        "dimensions": ["FREQ", "TIME_PERIOD", "AGE", "SEX", "ICD10", "GEO", "ISCED97"]
+    },
+    {
+        "name": "hlth_ehis_st1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "ICD10", "SEX", "AGE", "GEO", "ISCED97"]
+    },
+    {
+        "name": "hlth_ehis_st2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "ACCIDENT", "GEO", "ISCED97"]
+    },
+    {
+        "name": "hlth_ehis_st3",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "ACCIDENT", "ISCED97", "GEO"]
+    },
+    {
+        "name": "hlth_ehis_st4",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "LEVELS", "GEO", "ISCED97"]
+    },
+    {
+        "name": "hlth_hc_dent",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "ISCO08", "UNIT"]
+    },
+    {
+        "name": "htec_cis3",
+        "dimensions": ["FREQ", "INDIC_IN", "NACE_R1", "SIZENACE", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "htec_cis4",
+        "dimensions": ["FREQ", "NACE_R1", "INDIC_IN", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "htec_cis5",
+        "dimensions": ["FREQ", "NACE_R1", "INDIC_IN", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "htec_cis6",
+        "dimensions": ["FREQ", "INDIC_IN", "NACE_R2", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "ipr_da_gdp",
+        "dimensions": ["FREQ", "UNIT", "GEO", "TIME_PERIOD", "CURRENCY"]
+    },
+    {
+        "name": "ipr_dfa_gdp",
+        "dimensions": ["FREQ", "UNIT", "GEO", "TIME_PERIOD", "CURRENCY"]
+    },
+    {
+        "name": "ipr_ta_gdp",
+        "dimensions": ["FREQ", "UNIT", "GEO", "TIME_PERIOD", "CURRENCY"]
+    },
+    {
+        "name": "ipr_tr_gdp",
+        "dimensions": ["FREQ", "UNIT", "GEO", "TIME_PERIOD", "CURRENCY"]
+    },
+    {
+        "name": "isoc_bde15ag",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "NACE_R1", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15ap",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "NACE_R1", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15ar",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "NACE_R1", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15av",
+        "dimensions": ["FREQ", "GEO", "TIME_PERIOD", "NACE_R1", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15b_e",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15b_h",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "INDIC_IS", "HHTYP"]
+    },
+    {
+        "name": "isoc_bde15b_i",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15b_p",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15cbc",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15csk",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15dec",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15cua",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15dip",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15disc",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15dth",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15ee",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bde15ei",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bdek_di",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bdek_ps",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bdek_sme",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_bdek_smi",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_cisce_fp",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_cisce_ic",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_cisce_ra",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "SIZEN_R2", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_cisci_ax",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_cisci_co",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_cisci_f",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_cisci_pb",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_cisci_rux",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "isoc_cisci_sw",
+        "dimensions": ["FREQ", "TIME_PERIOD", "GEO", "UNIT", "IND_TYPE", "INDIC_IS"]
+    },
+    {
+        "name": "iss_barr",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "LEV_IMPT", "BARRIER", "ENTERPR", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_econ",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "ENTERPR", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_dest",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "BUS_FUNC", "PARTNER", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_ctry",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "PARTNER", "BUS_FUNC", "ENTERPR", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_empl",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "IMPACT", "IMPACPCV", "ENTERPR", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_fac",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "LEV_IMPT", "REASON", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_func",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "SRC_ACT", "BUS_FUNC", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_imp",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "IMPACT", "IMPACPCV", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_job",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "WORK", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_stat",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "ENTERPR", "ENTGRP", "GEO"]
+    },
+    {
+        "name": "iss_part",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "BUS_FUNC", "BUS_PART", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "iss_plan",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_SB", "LEV_IMPT", "REASON", "ENTERPR", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "lc_n00hour",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n00cost",
+        "dimensions": ["FREQ", "TIME_PERIOD", "CURRENCY", "UNIT", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n00num1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n00num2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n00struc",
+        "dimensions": ["FREQ", "TIME_PERIOD", "LCSTRUCT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n00temp",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n00stu",
+        "dimensions": ["FREQ", "TIME_PERIOD", "STATINFO", "SIZECLAS", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n04cost",
+        "dimensions": ["FREQ", "TIME_PERIOD", "CURRENCY", "UNIT", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n04hour",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n04num1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n04num2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n04struc",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n04stu",
+        "dimensions": ["FREQ", "TIME_PERIOD", "STATINFO", "SIZECLAS", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n08cost_r1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "CURRENCY", "UNIT", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n08hour_r1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n08cost_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "CURRENCY", "UNIT", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n08costot_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "CURRENCY", "UNIT", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n08hour_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n08num1_r1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n08num1_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n08num2_r1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n08num2_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n08struc_r1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n08struc_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n08stu_r1",
+        "dimensions": ["FREQ", "TIME_PERIOD", "STATINFO", "SIZECLAS", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "lc_n08stu_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "STATINFO", "SIZECLAS", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n12hour_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n12num1_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n12costot_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "CURRENCY", "UNIT", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n12cost_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "CURRENCY", "UNIT", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n12num2_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n12stu_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "STATINFO", "SIZECLAS", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_n12struc_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r08cost_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "CURRENCY", "UNIT", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r08struc_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r08num1_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r08stu_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "STATINFO", "SIZECLAS", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r08num2_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r12cost_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "CURRENCY", "UNIT", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r12stu_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "STATINFO", "SIZECLAS", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r12num1_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r12num2_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "WORKTIME", "INDIC_LC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "lc_r12struc_r2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SIZECLAS", "LCSTRUCT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "mar_sg_am_cwk",
+        "dimensions": ["FREQ", "TIME_PERIOD", "REP_MAR", "CARGO", "UNIT"]
+    },
+    {
+        "name": "migr_eiord",
+        "dimensions": ["FREQ", "CITIZEN", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "migr_eipre",
+        "dimensions": ["FREQ", "CITIZEN", "SEX", "AGE", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "migr_eirfs",
+        "dimensions": ["FREQ", "REASON", "CITIZEN", "INDIC_MG", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "migr_eirtn",
+        "dimensions": ["FREQ", "CITIZEN", "INDIC_MG", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "migr_resbc1",
+        "dimensions": ["FREQ", "DECISION", "ISCO08", "CITIZEN", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "migr_resfirst",
+        "dimensions": ["FREQ", "REASON", "CITIZEN", "DURATION", "UNIT", "TIME_PERIOD", "GEO"]
+    },
+    {
+        "name": "road_tf_veh",
+        "dimensions": ["FREQ", "REGISVEH", "VEHICLE", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "rail_tf_netseg",
+        "dimensions": ["FREQ", "TIME_PERIOD", "NET_SEG", "TRAIN"]
+    },
+    {
+        "name": "rail_tf_netseg10",
+        "dimensions": ["FREQ", "TIME_PERIOD", "NET_SEG10", "TRAIN"]
+    },
+    {
+        "name": "tour_dem_toed11",
+        "dimensions": ["FREQ", "DURATION", "UNIT", "PARTNER", "GEO", "TIME_PERIOD", "ISCED11"]
+    },
+    {
+        "name": "tran_r_veh_jour",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_TR", "GEO"]
+    },
+    {
+        "name": "trng_cost01s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cost01n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cost02s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cost02n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cost03n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cost03s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cost05",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO"]
+    },
+    {
+        "name": "trng_cost04s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cost04n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cost07",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO"]
+    },
+    {
+        "name": "trng_cost08",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO"]
+    },
+    {
+        "name": "trng_cost09n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cost09s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts01",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts02",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts03",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts04",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts05",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts06",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts07",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FREQUENC", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts08",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts09",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts10",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts11",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts13",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts12",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts14",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts15",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts16",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts17",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts18",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts19",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts22",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts20",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts21",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts23",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts25",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts24",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FREQUENC", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts26",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts27",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts28",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts29",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R2"]
+    },
+    {
+        "name": "trng_cvts30",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts38",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_01",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cvts3_03",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cvts3_05",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cvts3_07",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cvts3_09",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_cvts3_10",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_11",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_cvts3_12",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_13",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_cvts3_14",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_15",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_cvts3_16",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_19",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cvts3_20",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_17",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FREQUENC", "FORMEV", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cvts3_21",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "FREQUENC", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_22",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FREQUENC", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_23",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "FREQUENC", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_25",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "FREQUENC", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_29",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "PUB_MEAS", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_37",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "REASON", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_39",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "CAT_POP", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_40",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "CAT_POP", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_41",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_44",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "AGE", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_43",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "AGE", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_45",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "SEX", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_47",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "AGE", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_48",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "AGE", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_49",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_52",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_51",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_cvts3_53",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_55",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_57",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_61",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_63",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "TYPCOST", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_65",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_67",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "PROV", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_68",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "PROV", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_69",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_75",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cvts3_77",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cvts3_71",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_73",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_79",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FIELD", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_cvts3_80",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FIELD", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_85",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_87",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "NACE_R1", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_88",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts3_89",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "SEX", "GEO"]
+    },
+    {
+        "name": "trng_cvts3_90",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts42",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts46",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts50",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts54",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts56",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts58",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts59",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "TYPCOST"]
+    },
+    {
+        "name": "trng_cvts60",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "TYPCOST"]
+    },
+    {
+        "name": "trng_cvts62",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts64",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPCOST", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts66",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts72",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts70",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts74",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts76",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts78",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts86",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts92",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "TYPTRAI", "SIZECLAS"]
+    },
+    {
+        "name": "trng_cvts96",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "TYPTRAI", "SIZECLAS"]
+    },
+    {
+        "name": "trng_empl01n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "SEX", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_empl01s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "SEX", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent03as",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent03an",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent03bs",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent03bn",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "GEO", "TYPTRAI"]
+    },
+    {
+        "name": "trng_ent03n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent03s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent04s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent04n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent05n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent05s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent06n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_ent06s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent07s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPASSE", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent07n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPASSE", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_ent08as",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "MAINW", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent08an",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "MAINW", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent08n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "YES_NO", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent08s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "YES_NO", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent09s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent09n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_ent10n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_ent10s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent11n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_ent11s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent12s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent12n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_ent13s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent13n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_ent15s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent15n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent14s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPEAGR", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent14n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPEAGR", "GEO", "NACE_R1", "TYPTRAI"]
+    },
+    {
+        "name": "trng_ent16n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FORMEV", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent16s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FORMEV", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent17n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent17s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "REASON", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent18n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TECH", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent18s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TECH", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent19n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "YES_NO", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent19s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "YES_NO", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent23",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SECTFUND", "GEO"]
+    },
+    {
+        "name": "trng_ent21",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "CVT_CH", "TYPCH", "GEO"]
+    },
+    {
+        "name": "trng_ent20s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "CVT_CH", "TYPTRAIF", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent20n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "CVT_CH", "TYPTRAIF", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_ent22n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "ISCO88", "PARTICIP", "GEO"]
+    },
+    {
+        "name": "trng_ent22s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "ISCO88", "PARTICIP", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_ent24",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SECTFUND", "GEO"]
+    },
+    {
+        "name": "trng_ent25",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "CAT_POP", "TYPTRAI", "GEO"]
+    },
+    {
+        "name": "trng_ent26",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "ISCO88", "TYPTRAI", "GEO"]
+    },
+    {
+        "name": "trng_hour01s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_hour01n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_hour03s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "PROV", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_hour03n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "PROV", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_hour04n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FIELD", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_hour04s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "FIELD", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_hour05s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_hour05n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_hour06n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_hour06s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_hour07s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_hour08s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_hour07n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "TYPTRAI", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_hour08n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_hour09n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "GEO", "TYPEAGR"]
+    },
+    {
+        "name": "trng_hour09s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SIZECLAS", "GEO", "TYPEAGR"]
+    },
+    {
+        "name": "trng_hour10n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "GEO", "TECH"]
+    },
+    {
+        "name": "trng_hour10s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SIZECLAS", "GEO", "TECH"]
+    },
+    {
+        "name": "trng_part01s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_part02s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "SIZECLAS"]
+    },
+    {
+        "name": "trng_part01n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_part02n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "GEO", "NACE_R1"]
+    },
+    {
+        "name": "trng_part03n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "GEO", "TYPEAGR"]
+    },
+    {
+        "name": "trng_part03s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SIZECLAS", "GEO", "TYPEAGR"]
+    },
+    {
+        "name": "trng_part04n",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "NACE_R1", "GEO", "TECH"]
+    },
+    {
+        "name": "trng_part04s",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SIZECLAS", "GEO", "TECH"]
+    },
+    {
+        "name": "tus_00age2",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "AGE", "ACL00", "GEO"]
+    },
+    {
+        "name": "tus_00age",
+        "dimensions": ["FREQ", "TIME_PERIOD", "UNIT", "SEX", "AGE", "ACL00", "GEO"]
+    },
+    {
+        "name": "urb_percep",
+        "dimensions": ["FREQ", "TIME_PERIOD", "INDIC_UR", "CITIES"]
+    },
+    {
+        "name": "yth_cult_010",
+        "dimensions": ["FREQ", "UNIT", "AGE", "SEX", "GEO", "TIME_PERIOD", "ACL00", "FREQUENC"]
+    },
+    {
+        "name": "yth_educ_040",
+        "dimensions": ["FREQ", "INDIC_ED", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "yth_hlth_010",
+        "dimensions": ["FREQ", "SEX", "AGE", "UNIT", "TIME_PERIOD", "GEO"]
+    },
+    {
+        "name": "yth_hlth_011",
+        "dimensions": ["FREQ", "SEX", "AGE", "QUANTILE", "UNIT", "TIME_PERIOD", "GEO"]
+    },
+    {
+        "name": "yth_hlth_020",
+        "dimensions": ["FREQ", "SEX", "AGE", "UNIT", "TIME_PERIOD", "GEO"]
+    },
+    {
+        "name": "yth_hlth_021",
+        "dimensions": ["FREQ", "SEX", "AGE", "QUANTILE", "UNIT", "TIME_PERIOD", "GEO"]
+    },
+    {
+        "name": "yth_hlth_050",
+        "dimensions": ["FREQ", "TIME_PERIOD", "SEX", "AGE", "UNIT", "GEO"]
+    },
+    {
+        "name": "yth_incl_030",
+        "dimensions": ["FREQ", "UNIT", "AGE", "SEX", "GEO", "TIME_PERIOD", "HHSTATUS"]
+    },
+    {
+        "name": "yth_incl_060",
+        "dimensions": ["FREQ", "UNIT", "AGE", "SEX", "GEO", "TIME_PERIOD", "HHSTATUS"]
+    },
+    {
+        "name": "yth_incl_080",
+        "dimensions": ["FREQ", "C_BIRTH", "SEX", "AGE", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "yth_incl_130",
+        "dimensions": ["FREQ", "WSTATUS", "SEX", "AGE", "GEO", "TIME_PERIOD", "UNIT"]
+    },
+    {
+        "name": "yth_part_010",
+        "dimensions": ["FREQ", "UNIT", "AGE", "SEX", "GEO", "TIME_PERIOD", "FREQUENC", "IND_TYPE"]
+    },
+    {
+        "name": "yth_part_030",
+        "dimensions": ["FREQ", "UNIT", "AGE", "SEX", "GEO", "TIME_PERIOD", "YES_NO"]
+    },
+    {
+        "name": "yth_part_020",
+        "dimensions": ["FREQ", "UNIT", "AGE", "SEX", "GEO", "TIME_PERIOD", "IND_TYPE", "FREQUENC"]
+    },
+    {
+        "name": "yth_volunt_010",
+        "dimensions": ["FREQ", "UNIT", "AGE", "SEX", "GEO", "TIME_PERIOD", "YES_NO"]
+    }
+]

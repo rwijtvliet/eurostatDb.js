@@ -3,6 +3,8 @@
  *
  * Much information about the Eurostat data API is found here:
  * http://epp.eurostat.ec.europa.eu/portal/page/portal/sdmx_web_services/getting_started/rest_sdmx_2.1
+ * and here:
+ * http://epp.eurostat.ec.europa.eu/portal/page/portal/sdmx_web_services/getting_started/a_few_useful_points
  *
  *
  * Use of this library:
@@ -20,7 +22,7 @@
  * .fetchDfs()
  *      Prepare dataflow objects that describe what data are available from eurostat server. (asynchronous)
  *      Arguments: (optional) filter word, or array with filter words, of which dataflow name or dataflow description must include >=1 to be saved. If omitted or "": all available on eurostat server.
- *                 (optional) callback function with as argument a clone of the array of df objects.
+ *                 (optional) callback function with as argument the error object (if applicable) and a clone of the array of df objects.
  *      Return: eurostatDb module itself.
  *
  * .dfNames()
@@ -36,7 +38,7 @@
  * .fetchDsd()
  *      Fetch, through eurostat server API, data structure definitions (DSDs), for certain dataflow. (asynchronous)
  *      Arguments: dataflow name.
- *                 (optional) callback function called after dsd retrieval, with as argument a clone of the dsd object.
+ *                 (optional) callback function called after dsd retrieval, with as argument the error object (if applicable) and a clone of the dsd object.
  *      Return: eurostatDb module itself.
  *
  * .namesWithDsd()
@@ -54,24 +56,26 @@
  *      Arguments: dataflow name.
  *      Return: clone of array of dimension names.
  *
- * .codeList()
- *      Array with codes, and their description, that can be used/found for certain field.
+ * .codelist()
+ *      Array with code names, and their description, that can be used/found for certain field.
  *      Arguments: dataflow name.
- *                 name of field (or dimension) of which the list of possible codes is wanted.
- *      Return: clone of code list.
+ *                 (optional) name of field (or dimension) of which the list of possible codes is wanted. If omitted: all codelists.
+ *      Return: clone of code list array, with {name: "codename", descr: "codedescription"} objects.
  *
- * .codeListDict()
+ * .codelistDict()
  *      Dictionary object with codes, and their description, that can be used/found for certain field.
- *      Arguments: dataflow name.
- *                 name of field (or dimension) of which the list of possible codes is wanted.
- *      Return: object with (code: description) pairs.
+ *      Arguments: (optional) dataflow name. If omitted: for all dataflows.
+ *                 (optional) name of field (or dimension) of which the list of possible codes is wanted. If omitted: for all fieldnames.
+ *      Return: if both specified:       object with {code: description}, for each code in the codelist
+ *              if fieldname omitted:    object with {fieldname: {code: description}}, for each fieldname in the codelist-array.
+ *              if datoflowname omitted: object with {dataflowname: {fieldname: {code: description}}}, for each dsd that has been fetched.
  *
- * .addTable()
- *      Initialise table in database to store data.
+ * .initTable()
+ *      (Re)initialise table in database to store data.
  *      Arguments: dataflow name.
  *                 (optional) fixDimFilter object, describing which dimensions are fixed to which values.
  *                 (optional) timePeriod object, describing time period of which to retrieve data. Must contain at least one of the properties 'startYear' and 'endYear'.
- *                 (optional) callback function called after tbl initialisation, with as argument a clone of the tbl object.
+ *                 (optional) callback function called after tbl initialisation, with as argument the error object (if applicable) and a clone of the tbl object.
  *      Return: eurostatDb module itself.
  *
  * .tbl()
@@ -103,16 +107,8 @@
  *      Fetch, through eurostat server API, certain data. (asynchronous)
  *      Arguments: dataflow name.
  *                 varDimFilter object, or array of varDimFilter objects, describing which data should be fetched.
- *                 (optional) callback function called each time a piece of data (records) is retrieved, with as argument the records.
- *                 (optional) callback function called once, when ALL data is available. No argument.
- *                 When only ONE callback function is specified, it is assumed to be the latter one.
+ *                 (optional) callback function called when ALL data is available, with as argument the error object (if applicable) and the records that were fetched to complete the data.
  *      Return: eurostatDb module itself.
- *
- * .dataFetched()
- *      Check if certain data is already fetched and available for use.
- *      Arguments: dataflow name.
- *                 varDimFilter object, or array of varDimFilter objects, describing which data should be fetched.
- *      Return: true or false.
  *
  * .getRst()
  *      Get data (record set) from local database.
@@ -121,7 +117,13 @@
  *                 (optional) order string, e.g. "OBS_VALUE asec" or "TIME desc". If omitted: ordered by ascending TIME field value.
  *      Return: array with records; each record is object with (field:value) pairs.
  *
- *
+ * .fetchRst()
+ *      Get data (record set) from local database and fetch, through eurostat API, any data that might be missing.
+ *      Arguments: dataflow name.
+ *                 fieldFilter object.
+ *                 (optional) order string, e.g. "OBS_VALUE asec" or "TIME desc". If omitted: ordered by ascending TIME field value.
+ *                 (optional) callback function called after all data is available, with as argument the error object (if applicable) and the record set.
+ *      Return: eurostatDb module itself.
  *
  * DESCRIPTION OF OBJECTS
  *
@@ -157,16 +159,17 @@
  *  }
  *
  * varDimFilter object: {                     //Defines, for each field in the varDims array of the tbl object (see above), which values should be fetched.
- *      field1: ["value", ...],
- *      field2: ["value", ...],
- *      ...
+ *      field1: "value",                      //--> All values should be strings to avoid problems with leading 0s.
+ *      field2: ["value", ...],               //--> Arrays to get multiple values.
+ *      field3: "",                           //--> Empty string to get all values.
+ *      ...                                   //ALL fields in the varDims array must be present, also those for which value = "".
  *  }
  *
- * fieldFilter object: {                      //Defines, for zero or more fields in the fields array of the tbl object (see above), which values should be gotten.
+ * fieldFilter object: {                      //Defines, for zero or more fields in the fields array of the tbl dsd object (see above), which records should be gotten.
  *      field1: "value",                      //See TaffyDB description for allowed filters: http://www.taffydb.com/writingqueries
- *      field2: ["value2a", "orvalue2b"],     //array specifies OR
- *      field3: {lt: "maxvalue"},             //lt, lte, gt, gte (<,<=,>,>=), is, isnocase, left, leftnocase, right, rightnocase (match all/leftmost/rightmost characters case(in)sensitive),
- *      ...
+ *      field2: ["value2a", "orvalue2b"],     //--> array specifies OR
+ *      field3: {lt: "maxvalue"},             //--> lt, lte, gt, gte (<,<=,>,>=), is, isnocase, left, leftnocase, right, rightnocase (match all/leftmost/rightmost characters case(in)sensitive),
+ *      ...                                   //Fields in the varDims array, for which value = "", may be left out, but this is not recommended.
  *  }
  *
  *
@@ -179,6 +182,12 @@
  *
  */
 
+
+
+//TODO: count expected return size, check if exceeds limit of 1 000 000
+//http://epp.eurostat.ec.europa.eu/portal/page/portal/sdmx_web_services/getting_started/a_few_useful_points
+//TODO: check if more success when moving TIME_PERIOD to end of dimensions array, always.
+//TODO: turn into ECMA6
 
 //Make sure Object.keys function is available in all browsers. May be removed in due time.
 if (typeof Object.keys != 'function') {
@@ -200,17 +209,24 @@ function eurostatDb () {
     esDb.fetchDfs = function (filter, callback){
         //Get array of all dataflows that are available from API that comply to filter, and save to internal 'dfs' array.
         var url = "js/all_latest_ESTAT_references=none_detail=full.xml";
-        //originally found at "http://www.ec.europa.eu/eurostat/SDMX/diss-web/rest/dataflow/ESTAT/all/latest", cannot be read by machine (protected?)
+        //originally found at "http://www.ec.europa.eu/eurostat/SDMX/diss-web/rest/dataflow/ESTAT/all/latest", cannot be fetched by machine (protected?)
+
+        if (arguments.length === 1 && typeof arguments[0] === "function") {
+            filter = undefined;
+            callback = arguments[0];
+        }
 
         if (typeof filter === "string") filter = [filter];
 
-        $.ajax(url, {
-            success: function(xml) {
+        $.get(url)
+            .done(function (xml) {
                 dfs = parseDfsXml(xml, filter);
-                if (typeof callback === "function") callback($.extend(true, [], dfs));
-            },
-            error: function(x, error) {throw error;}
-        });
+                if (typeof callback === "function") callback(null, $.extend(true, [], dfs));
+            })
+            .fail(function (xhr, textStatus, error) {
+                if (typeof callback === "function") callback(new Error(error.toString()), undefined); //no callback --> no error
+            });
+
         return esDb;
     };
     function parseDfsXml (xml, filter){
@@ -261,18 +277,27 @@ function eurostatDb () {
         var dsd = getDsd(name),
             url = "http://ec.europa.eu/eurostat/SDMX/diss-web/rest/datastructure/ESTAT/DSD_" + name;
 
-        if (dsd) return; //dsd already obtained earlier
+        if (dsd) {//dsd already obtained earlier
+            if (typeof callback === "function") callback(null, $.extend(true, {}, dsd));
+            return esDb;
+        }
 
-        $.ajax(url, {
-            success: function (xml) {
-                if (dsd) return; //dsd already obtained earlier (check again because of asynchronosity)
+        $.get(url)
+            .done(function (xml) {
+                if (dsd) {//dsd already obtained earlier (check again because of asynchronousity)
+                    if (typeof callback === "function") callback(null, $.extend(true, {}, dsd));
+                }
                 dsd = parseDsdXml(xml);
                 dsd.name = name;
 
                 dsds.push(dsd);
-                if (typeof callback === "function") callback($.extend(true, {}, dsd));
-            }
-        });
+                if (typeof callback === "function") callback(null, $.extend(true, {}, dsd));
+            })
+            .fail(function (xhr, textStatus, error) {
+                if (typeof callback === "function") callback(new Error(error.toString()), undefined);
+            });
+
+        return esDb;
     };
     function parseDsdXml (xml){
         //Parse xml data describing data flow definition of certain dataflow.
@@ -314,28 +339,30 @@ function eurostatDb () {
             });
         });
 
-        //Additional information for analysis.
-        /*
-        dsd.conceptsNotInDimensions = [];
-        dsd.concepts.forEach(function(con){
-            if (dsd.dimensions.indexOf(con)===-1) dsd.conceptsNotInDimensions.push(con);
-        });
-        dsd.dimensionsNotInConpects = [];
-        dsd.dimensions.forEach(function(dim){
-            if (dsd.concepts.indexOf(dim)===-1) dsd.dimensionsNotInConpects.push(dim);
-        });*/
-
         return dsd;
     }
-    esDb.codeList = function(name, fldName) {return $.extend([], $.grep(getDsd(name).codelists, function(codelist){return codelist.name === fldName;})[0].codes);}; //Array of the names, and the meaning, of the codes that a field or dimension may take.
-    esDb.codeListDict = function(name, fldName) {
+    esDb.codelist = function(name, fldName) {
+        //Array of the names, and the meaning, of the codes that a field or dimension may take.
+        if (!fldName) return $.extend(true, {}, getDsd(name).codelists);
+        else return $.extend([], $.grep(getDsd(name).codelists, function(codelist){return codelist.name === fldName;})[0].codes);
+    };
+    esDb.codelistDict = function(name, fldName) {
         var dict = {};
-        esDb.codeList(name, fldName).forEach(function(code) {dict[code.name] = code.descr;});
+        if (!name) {
+            var names = dsds.map(function (dsd) {return dsd.name;});
+            names.forEach(function (name) {dict[name] = esDb.codelistDict(name);});
+        } else if (!fldName) {
+            var fldNames = getDsd(name).codelists.map(function (codelist) {return codelist.name;});
+            fldNames.forEach(function (fldName) {dict[fldName] = esDb.codelistDict(name, fldName)});
+        } else {
+            var codes = $.grep(getDsd(name).codelists, function(codelist){return codelist.name === fldName;})[0].codes;
+            codes.forEach(function (code) {dict[code.name] = code.descr;});
+        }
         return dict;
     };
     esDb.dimensions = function(name) {return $.extend([], getDsd(name).dimensions);}; //Array of all the dimensions.
 
-    esDb.addTable = function (/*name, fixDimFilter, timePeriod, callback*/) {
+    esDb.initTable = function (/*name, fixDimFilter, timePeriod, callback*/) {
         //Get arguments straight.
         var name = arguments[0],
             fixDimFilter,
@@ -358,10 +385,11 @@ function eurostatDb () {
             tbl,
             i = tblIndex(name);
         if (!(dsd)) {
-            esDb.fetchDsd(name, function(){
-                esDb.addTable(name, fixDimFilter, timePeriod, callback)
+            esDb.fetchDsd(name, function(error){
+                if (error) callback(error);
+                else esDb.initTable(name, fixDimFilter, timePeriod, callback)
             });//retry to add table when dsd is fetched
-            return;
+            return esDb;
         }
         if (i > -1) {tbls[i] = tbls[tbls.length-1]; tbls.pop();} //Table is already in db; delete.
 
@@ -395,17 +423,16 @@ function eurostatDb () {
             }
             if (period) period = "/?" + period;
         }
+
         tbl.fixDims.push("TIME_PERIOD");
         tbl.fixDimFilter["TIME_PERIOD"] = period;
 
         //Get table fields.
-        tbl.dsd.concepts.forEach(function(con) {
-            if (!tbl.fixDimFilter.hasOwnProperty(con)) tbl.fields.push(con);
-        });
+        tbl.dsd.concepts.forEach(function(con) {if (!tbl.fixDimFilter.hasOwnProperty(con)) tbl.fields.push(con); });
 
         tbls.push(tbl);
 
-        if (typeof callback === "function") callback($.extend(true,{},tbl));
+        if (typeof callback === "function") callback(null, $.extend(true,{},tbl));
         return esDb;
     };
     esDb.namesWithTbl = function (){return tbls.map(function(tbl){return tbl.name;});};
@@ -414,39 +441,52 @@ function eurostatDb () {
     esDb.varDims = function(name) {return $.extend([], getTbl(name).varDims);}; //Array of variable dimensions in fetching data for a certain table.
     esDb.fixDimFilter = function(name) {return $.extend([], getTbl(name).fixDimFilter);}; //Object of fixed dimensions, and their values, for a certain table.
 
-    esDb.fetchData = function (name, varDimFilters, callbacks) {
-        var callbackOften,
-            callbackOnce;
-        if (arguments.length === 3) callbackOnce = arguments[2]; //if one callback, it is callbackOnce.
-        else if (arguments.length === 4) {
-            callbackOften = arguments[2];
-            callbackOnce = arguments[3];
-        }
+    esDb.fetchData = function (name, varDimFilters, callback) {
+        var errors = "",
+            fetchedData = [];
         var tbl = getTbl(name),
-            inflight = 0;
+            inflight = 0; //count how many ajax requests we're still waiting for.
 
-        if (!(tbl)) throw "No table found to store data from dataflow '" +  name + "'. Make sure you have run .addTable()";
+        if (!(tbl)) {callback(new Error("No table found to store data from dataflow '" +  name + "'. Make sure you have run .initTable()")); return esDb;}
 
         if (!(varDimFilters instanceof Array)) varDimFilters = [varDimFilters];
         varDimFilters.forEach(function (varDimFilter) {
             //varDimFilter: single object with properties that are value arrays. singlevalFilters(varDimFilter): array of objects with properties that are single values.
             singlevalFilters(varDimFilter).forEach(function (filter) {
                 if (!(tbl.data(filter).count())) {
-                    var url = dataUrl(tbl.name, filter);
+                    try {var url = dataUrl(tbl.name, filter);}
+                    catch (e) {e = e.toString(); if (errors.indexOf(e) === -1) errors += " | " + e;}
+                    console.log("getting data from:" + url);//DEBUG
                     inflight++;
-                    $.ajax(url, {
-                        success: function (xml) {
-                            var records = parseDataXml(xml, tbl.fields);
-                            tbl.data.insert(records);
+                    $.get(url)
+                        .done(function(xml) {
+                            try {
+                                var records = parseDataXml(xml, tbl.fields); //might throw error
+                                tbl.data.insert(records);
+                                fetchedData = fetchedData.concat(records);
+                            } catch (e) {
+                                e = e.toString(); //.toString() as sometimes Error Object is returned, not error text.
+                                if (errors.indexOf(e) === -1) errors += " | " + e; //new error in this run.
+                            }
+                        })
+                        .fail(function(xhr, textStatus, e) {
+                            e = e.toString(); //.toString() as sometimes Error Object is returned, not error text.
+                            if (errors.indexOf(e) === -1) errors += " | " + e; //TODO: put adding errors into own function
+                        })
+                        .always(function() {
                             inflight--;
-                            if (typeof callbackOften === "function") callbackOften(records);
-                            if ((!inflight) && (typeof callbackOnce === "function")) callbackOnce();
-                        }
-                    });
+                            if ((!inflight) && (typeof callback === "function")) {
+                                errors = (errors) ? new Error(errors) : null; //TODO: checking for inflight into own function
+                                callback(errors, fetchedData);
+                            }
+                        });
                 }
             });
         });
-        if ((!inflight) && (typeof callbackOnce === "function")) callbackOnce();
+        if ((!inflight) && (typeof callback === "function")) {
+            errors = (errors) ? new Error(errors) : null;
+            callback(errors, fetchedData);
+        }
         return esDb;
     };
     function dataUrl (name, varDimFilter) {
@@ -456,17 +496,17 @@ function eurostatDb () {
             dimVals = [],
             dimString;
 
-        tbl.dsd.dimensions.forEach(function(dimension){
+        tbl.dsd.dimensions.forEach(function (dim) {
             var dimVal;
-            if (tbl.fixDimFilter.hasOwnProperty(dimension)) dimVal = tbl.fixDimFilter[dimension];
-            else if (varDimFilter.hasOwnProperty(dimension)) dimVal = varDimFilter[dimension];
-            else throw "A value for the dimension '" + dimension + "' is needed according to the 'dimensions' property of the table definition. However, a value was not given by the user and also not by the fixedDimensions of the table definition.";
+            if (tbl.fixDimFilter.hasOwnProperty(dim)) dimVal = tbl.fixDimFilter[dim];
+            else if (varDimFilter.hasOwnProperty(dim)) dimVal = varDimFilter[dim];
+            else throw Error("Value for dimension '" + dim + "' (in table definition) given neither by table definition nor by the user. Use '' (empty string) to get all possible values for this dimension.");
             if (!(dimVal instanceof Array)) dimVal = [dimVal];//increase robustness, in case of only one value that's not put in 1-element array.
             dimVals.push(dimVal);
         });
-        dimString = dimVals.map(function(e){return e.join("+");}).join(".");
-
+        dimString = dimVals.map(function (e) {return e.join("+");}).join(".");
         url += dimString;
+
         return url;
     }
     function parseDataXml(xml, fields){
@@ -475,10 +515,14 @@ function eurostatDb () {
             converter = new X2JS();
 
         xmlData = converter.xml2json(xml);
-        if (!xmlData.hasOwnProperty("GenericData")) throw "Unexpected xml document; node 'GenericData' not found";
+        if (!xmlData.hasOwnProperty("GenericData")) throw Error("Unexpected xml document. Node 'GenericData' not found");
         if (!xmlData["GenericData"].hasOwnProperty("DataSet")) {
             if (!xmlData["GenericData"].hasOwnProperty("Footer") || !xmlData["GenericData"]["Footer"].hasOwnProperty("Message") || !xmlData["GenericData"]["Footer"]["Message"].hasOwnProperty("Text")) throw "Unexpected xml document; nodes 'GenericData/DataSet'  AND 'GenericData/Footer/Message/Text' not found.";
-            else throw "Unexpected xml document; message from server:\n" + xmlData["GenericData"]["Footer"]["Message"]["Text"]["__text"];
+            else throw Error("Unexpected xml document. Message from server: " + xmlData["GenericData"]["Footer"]["Message"]["Text"]["__text"]);
+        }
+
+        if (!xmlData["GenericData"]["DataSet"].hasOwnProperty("Series")) { //empty dataset, no results found!
+            return newData; //empty
         }
         xmlData = xmlData["GenericData"]["DataSet"]["Series"];//chop off uninteresting part
 
@@ -500,7 +544,7 @@ function eurostatDb () {
                 } else {
                     v.OBS_VALUE = o["ObsValue"]["_value"];
                     if (!isNaN(v.OBS_VALUE)) v.OBS_VALUE = Number(v.OBS_VALUE);
-                    else throw "OBS_VALUE is NaN";
+                    else throw Error("OBS_VALUE is NaN");
                 }
                 if (o.hasOwnProperty("Attributes") && o["Attributes"].hasOwnProperty("Value") && o["Attributes"]["Value"].hasOwnProperty("_id") && o["Attributes"]["Value"]["_id"] === "OBS_FLAG") {
                     v.OBS_FLAG = o["Attributes"]["Value"]["_value"];
@@ -510,29 +554,48 @@ function eurostatDb () {
         });
         return newData;
     }
-    esDb.dataFetched = function (name, varDimFilters) {
-        //Check if all data is available.
-        var tbl = getTbl(name),
-            allFetched = true;
-        if (!(varDimFilters instanceof Array)) varDimFilters = [varDimFilters];
-        varDimFilters.forEach(function (varDimFilter) {
-            //varDimFilter: single object with properties that are value arrays. singlevalFilters(varDimFilter): array of objects with properties that are single values.
-            singlevalFilters(varDimFilter).forEach(function (filter) {
-                if (!allFetched) return;
-                if (!(tbl.data(filter).count())) allFetched = false;
-            });
-        });
-        return allFetched;
-    };
 
     esDb.getRst = function (name, fieldFilter, order) {
-        //Get recordset that is described with fieldFilter object.
+        //Get recordset that is described with fieldFilter object. Synchronous, searches in existing db.
+        order = order || "TIME asec";//default
+        fieldFilter = $.extend(true, {}, fieldFilter); //local copy
         var tbl = getTbl(name);
-        if (!(tbl)) throw "No table found with data for dataflow '" + name + "'. Make sure you have run .addTable()";
-        if (!(order)) order = "TIME asec";
-        for (var fieldName in fieldFilter) {if (tbl.fields.indexOf(fieldName) === -1) throw "Unknown fieldname '" + fieldName + "' present in filter.";}
+        if (!(tbl)) throw Error("No table found with data for dataflow '" + name + "'. Make sure you have run .initTable()");
+        Object.keys(fieldFilter).forEach(function (fld) {
+            if (tbl.fields.indexOf(fld) === -1) throw Error("Unknown fieldname '" + fld + "' present in filter.");
+            if (fieldFilter[fld] === "") delete fieldFilter[fld];
+        });
         return tbl.data(fieldFilter).order(order).get();
     };
+
+    esDb.fetchRst = function(name, fieldFilter, order, callback){
+        var tbl = getTbl(name);
+        if (typeof order === "function") {callback = order; order = undefined;}
+
+        //Get recordset that is described with fieldFilter object. Asynchronous, fetch data first if necessary.
+        if (!(tbl)) {
+            if (typeof callback === "function") callback(Error("No table found with data for dataflow '" + name + "'. Make sure you have run .initTable()"));
+            return esDb;
+        }
+        //Fetch (missing) data, get recordset, and use in callback.
+        db.fetchData(name, varDimFilter(tbl, fieldFilter), function (error) {
+            if (!error) {
+                try {var rst = esDb.getRst(name, fieldFilter, order);}
+                catch (e) {error = e;}
+            }
+            if (typeof callback === "function") callback(error, rst);
+        });
+        return esDb;
+    };
+    function varDimFilter(tbl, fieldFilter){ //Turn fieldFilter into varDimFilter, for use in .fetchData().
+        var varDimFilter = {};
+        tbl.varDims.forEach(function (varDim) {
+            var val = fieldFilter[varDim];
+            if (!val || $.isPlainObject(val)) varDimFilter[varDim] = ""; //dimension left out (val == undefined) or query object. Either case: must get data for all available values.
+            else varDimFilter[varDim] = val;
+        });
+        return varDimFilter;
+    }
 
     function allPropValCombinations(obj) {
         //From an object, of which the properties are arrays of values, create an array of objects, of which the properties
