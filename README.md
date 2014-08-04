@@ -15,9 +15,9 @@ If I already know exactly what data I'm interacting with, I might do something l
 ```js
 db = eurostatDb();
 db.initTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015}, function () {//1
-    db.fetchRst("demo_pjan", {SEX: "T", GEO:"NL", OBS_VALUE:{gt:16e6}}, function (error, rst) {//2
+    db.fetchRst("demo_pjan", {SEX: "T", GEO:"NL"}, function (error, rst) {//2
 
-        $("div#info").append("<h2>Total population in the Netherlands (years with >16 million):</h2>");
+        $("div#info").append("<h2>Total population in the Netherlands:</h2>");
         if (error) {$("div#info").append("<p>Error: " + error.message + "</p>"); return;}
         rst.forEach(function(r) {$("div#info").append("<p>In " + r.TIME + ": " + r.OBS_VALUE + "</p>");}); //3
     });
@@ -26,7 +26,7 @@ db.initTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 
 
 What's happening here?<br>
 Line 1 specifies the name of the dataflow that I'm interested in, and fixes some of its dimensions and the time period. That way, I always fetch annual data and age aggregates, from the time period between 1995 and 2015.<br>
-Line 2 fetches data for total population of Netherlands above 16million.<br>
+Line 2 fetches data for total population of Netherlands.<br>
 Line 3 then uses this data to make a list.<br>
 <br>
 
