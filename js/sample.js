@@ -22,15 +22,13 @@ db.initTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 
 
 cb = function (error, data) { //callback to display information to console
     if (error) console.error(error.message);
-    else console.log(JSON.stringify(data));
+    else console.log(JSON.stringify(data, null, 2));
 };
 function step1() {db.fetchDfs("monthly", cb );}
 function step2() {db.fetchDsd("DS-008573", cb);}
 function step3() {db.initTable("DS-008573", cb);}
 function step4() {db.fetchData("DS-008573", {FREQ:"M", DECLARANT:["001", "003"], PRCCODE:["27101100", "27101250"], MEASUREMENT_UNIT:"VALUE", INDICATORS: "IMPORTS"}, cb);}
-function step5() {db.fetchRst("DS-008573", {FREQ:"M", DECLARANT:["001", "003"], PRCCODE:["27101100", "27101250"], MEASUREMENT_UNIT:"VALUE", INDICATORS: "IMPORTS"}, cb);}
-
-
+function step5() {db.fetchRst("DS-008573", {FREQ:"M", DECLARANT:["001", "003"], PRCCODE:["27101100", "27101250"], MEASUREMENT_UNIT:"VALUE", INDICATORS: "IMPORTS", OBS_FLAG:"p"}, cb);}
 
 
 

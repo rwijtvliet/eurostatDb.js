@@ -218,8 +218,6 @@ function eurostatDb () {
             callback = arguments[0];
         }
 
-        if (typeof filter === "string") filter = [filter];
-
         $.get(url)
             .done(function (xml) {
                 dfs = parseDfsXml(xml, filter);
@@ -257,7 +255,7 @@ function eurostatDb () {
             //Filter, if needed.
             if (filter) {
                 add = false;
-                filter.forEach(function(filterTerm) {
+                arrayIfNot(filter).forEach(function(filterTerm) {
                     if (add) return;
                     if (df.name.toLowerCase().indexOf(filterTerm.toLowerCase()) > -1) add = true;
                     df.descrs.forEach(function (descr) {
@@ -283,9 +281,9 @@ function eurostatDb () {
             if (typeof callback === "function") callback(null, $.extend(true, {}, dsd));
             return esDb;
         }
-
         $.get(url)
             .done(function (xml) {
+                dsd = getDsd(name);
                 if (dsd) {//dsd already obtained earlier (check again because of asynchronousity)
                     if (typeof callback === "function") callback(null, $.extend(true, {}, dsd));
                 }
@@ -298,7 +296,6 @@ function eurostatDb () {
             .fail(function (xhr, textStatus, error) {
                 if (typeof callback === "function") callback(new Error(error.toString()), undefined);
             });
-
         return esDb;
     };
     function parseDsdXml (xml){
@@ -313,21 +310,27 @@ function eurostatDb () {
             converter = new X2JS(),
             renameCodelists = {"Observation flag.":"OBS_FLAG", "Observation status.":"OBS_VALUE"};
 
-
-        //Parse.
+        //Parse: dimensions.
         dsdXml = converter.xml2json(xml);
-        dsdXml["Structure"]["Structures"]["DataStructures"]["DataStructure"]["DataStructureComponents"]["DimensionList"]["Dimension"].forEach(function(dim) {
+        arrayIfNot(dsdXml["Structure"]["Structures"]["DataStructures"]["DataStructure"]["DataStructureComponents"]["DimensionList"]["Dimension"]).forEach(function(dim) {
             dsd.dimensions[+(dim._position) - 1] = dim["_id"];
         });
         var t = dsdXml["Structure"]["Structures"]["DataStructures"]["DataStructure"]["DataStructureComponents"]["DimensionList"]["TimeDimension"];
-        dsd.dimensions[+(t["_position"]) - 1] = t["_id"];
-        dsdXml["Structure"]["Structures"]["Concepts"]["ConceptScheme"]["Concept"].forEach(function(con) {
+        var timePos = +(t["_position"]) - 1;
+        dsd.dimensions[timePos] = t["_id"];
+        //Fix problems with dimensions, if TIME_PERIOD is not at end.
+        if (timePos !== dsd.dimensions.length - 1) {
+            var timeDim = dsd.dimensions.splice(timePos, 1)[0];//remove from middle
+            dsd.dimensions.push(timeDim);//add at end
+        }
+        //Parse: concepts.
+        arrayIfNot(dsdXml["Structure"]["Structures"]["Concepts"]["ConceptScheme"]["Concept"]).forEach(function(con) {
             dsd.concepts.push(con["_id"]);
         });
-        dsdXml["Structure"]["Structures"]["Codelists"]["Codelist"].forEach(function(clist) {
+        //Parse: codelists.
+        arrayIfNot(dsdXml["Structure"]["Structures"]["Codelists"]["Codelist"]).forEach(function(clist) {
             var codes = [];
-            if (!(clist["Code"] instanceof Array)) clist["Code"] = [clist["Code"]];
-            clist["Code"].forEach(function(code){
+            arrayIfNot(clist["Code"]).forEach(function(code){
                 codes.push({
                     name: code["_id"],
                     descr: code["Name"]["__text"]
@@ -447,44 +450,43 @@ function eurostatDb () {
 
         if (!(tbl)) {callback(new Error("No table found to store data from dataflow '" +  name + "'. Make sure you have run .initTable()")); return esDb;}
 
+        function errCollect(e) {
+            if (!(typeof e === "string")) e = e.toString();
+            if (errors.indexOf(e) > -1) return;
+            if (errors) errors += " | " + e; else errors = e;
+        }
+        function checkFinished() {
+            if (inflight || !(typeof callback === "function")) return;
+            errors = (errors) ? new Error(errors) : null;
+            callback(errors, fetchedData);
+        }
+
         if (!(varDimFilters instanceof Array)) varDimFilters = [varDimFilters];
         varDimFilters.forEach(function (varDimFilter) {
             //varDimFilter: single object with properties that are value arrays. singlevalFilters(varDimFilter): array of objects with properties that are single values.
             singlevalFilters(varDimFilter).forEach(function (filter) {
                 if (!(tbl.data(filter).count())) {
                     try {var url = dataUrl(tbl.name, filter);}
-                    catch (e) {e = e.toString(); if (errors.indexOf(e) === -1) errors += " | " + e;}
-                    console.log("getting data from:" + url);//DEBUG
+                    catch (e) {errCollect(e); return;}
                     inflight++;
                     $.get(url)
-                        .done(function(xml) {
+                        .done(function (xml) {
+                            console.log("                  "+ url);//DEBUG
                             try {
                                 var records = parseDataXml(xml, tbl.fields); //might throw error
-                                tbl.data.insert(records);
-                                fetchedData = fetchedData.concat(records);
-                            } catch (e) {
-                                e = e.toString(); //.toString() as sometimes Error Object is returned, not error text.
-                                if (errors.indexOf(e) === -1) errors += " | " + e; //new error in this run.
-                            }
+                                if (records) {tbl.data.insert(records);
+                                fetchedData = fetchedData.concat(records);}
+                            } catch (e) {errCollect(e);}
                         })
-                        .fail(function(xhr, textStatus, e) {
-                            e = e.toString(); //.toString() as sometimes Error Object is returned, not error text.
-                            if (errors.indexOf(e) === -1) errors += " | " + e; //TODO: put adding errors into own function
-                        })
-                        .always(function() {
+                        .fail(function (xhr, textStatus, e) {errCollect(e);})
+                        .always(function () {
                             inflight--;
-                            if ((!inflight) && (typeof callback === "function")) {
-                                errors = (errors) ? new Error(errors) : null; //TODO: checking for inflight into own function
-                                callback(errors, fetchedData);
-                            }
+                            checkFinished();
                         });
                 }
             });
         });
-        if ((!inflight) && (typeof callback === "function")) {
-            errors = (errors) ? new Error(errors) : null;
-            callback(errors, fetchedData);
-        }
+        checkFinished();
         return esDb;
     };
     function dataUrl (name, varDimFilter) {
@@ -524,15 +526,16 @@ function eurostatDb () {
         }
         xmlData = xmlData["GenericData"]["DataSet"]["Series"];//chop off uninteresting part
 
-        if (xmlData.hasOwnProperty("SeriesKey")) xmlData = [xmlData];//fix: problem with array if only 1 country
+        if (!(xmlData instanceof Array)) xmlData = [xmlData];//fix: problem with array if only 1 data set
         xmlData.forEach(function (d) {
             //get all data that remains the same (=unit, country, product, indic_nrg, ...) in series
             var v_base = {};
-            d["SeriesKey"]["Value"].forEach(function (skv) {
+            d["SeriesKey"]["Value"].forEach(function (skv, i) {
                 var key = skv["_id"];
                 if (fields.indexOf(key) > -1) v_base[key] = skv["_value"];
             });
             //get all value and year data from series
+            if (!(d["Obs"] instanceof Array)) d["Obs"] = [d["Obs"]];//fix: problem with array if only 1 observation value in data set
             d["Obs"].forEach(function (o) {
                 var v = $.extend({}, v_base); //copy
                 v.TIME = Number(o["ObsDimension"]["_value"]);
@@ -541,8 +544,9 @@ function eurostatDb () {
                     v.OBS_VALUE = v.OBS_STATUS === "na" ? null : 0; //value unknown: null. value (practically) zero: 0.
                 } else {
                     v.OBS_VALUE = o["ObsValue"]["_value"];
-                    if (!isNaN(v.OBS_VALUE)) v.OBS_VALUE = Number(v.OBS_VALUE);
-                    else throw Error("OBS_VALUE is NaN");
+                    if (v.OBS_VALUE === "NaN") v.OBS_VALUE = null;
+                    else if (!isNaN(v.OBS_VALUE)) v.OBS_VALUE = Number(v.OBS_VALUE);
+                    else throw Error("OBS_VALUE has unexpected value '" + v.OBS_VALUE + "' for dimensions " + JSON.stringify(v));
                 }
                 if (o.hasOwnProperty("Attributes") && o["Attributes"].hasOwnProperty("Value") && o["Attributes"]["Value"].hasOwnProperty("_id") && o["Attributes"]["Value"]["_id"] === "OBS_FLAG") {
                     v.OBS_FLAG = o["Attributes"]["Value"]["_value"];
@@ -630,6 +634,8 @@ function eurostatDb () {
     function tblIndex(name) {return tbls.map(function(tbl){return tbl.name;}).indexOf(name);}
 
     function pop(obj, key) {var value = {}; value[key] = obj[key]; delete obj[key]; return value;}
+
+    function arrayIfNot(arr) {return (arr instanceof Array) ? arr : [arr];}//turn into array, if it wasn't. (useful for forEach loops)
 
     return esDb;
 }
