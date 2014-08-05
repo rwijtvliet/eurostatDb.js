@@ -41,26 +41,20 @@
  *                 (optional) callback function called after dsd retrieval, with as argument the error object (if applicable) and a clone of the dsd object.
  *      Return: eurostatDb module itself.
  *
- * .namesWithDsd()
- *      Array of dataflow names for which the dsd has been fetched.
- *      Arguments: none.
- *      Return: array of dataflow names.
- *
  * .dsd()
  *      Fetched data structure definition (dsd) object.
  *      Arguments: dataflow name.
  *      Return: clone of dsd object.
  *
+ * .dsdNames()
+ *      Array of dataflow names for which the dsd has been fetched.
+ *      Arguments: none.
+ *      Return: array of dataflow names.
+ *
  * .dimensions()
  *      Array of dimensions for a certain dataflow.
  *      Arguments: dataflow name.
  *      Return: clone of array of dimension names.
- *
- * .codelist()
- *      Array with code names, and their description, that can be used/found for certain field.
- *      Arguments: dataflow name.
- *                 (optional) name of field (or dimension) of which the list of possible codes is wanted. If omitted: all codelists.
- *      Return: clone of code list array, with {name: "codename", descr: "codedescription"} objects.
  *
  * .codelistDict()
  *      Dictionary object with codes, and their description, that can be used/found for certain field.
@@ -68,7 +62,7 @@
  *                 (optional) name of field (or dimension) of which the list of possible codes is wanted. If omitted: for all fieldnames.
  *      Return: if both specified:       object with {code: description}, for each code in the codelist
  *              if fieldname omitted:    object with {fieldname: {code: description}}, for each fieldname in the codelist-array.
- *              if datoflowname omitted: object with {dataflowname: {fieldname: {code: description}}}, for each dsd that has been fetched.
+ *              if dataflowname omitted: object with {dataflowname: {fieldname: {code: description}}}, for each dsd that has been fetched.
  *
  * .initTable()
  *      (Re)initialise table in database to store data.
@@ -83,7 +77,7 @@
  *      Arguments: dataflow name.
  *      Return: clone of table object.
  *
- * .namesWithTbl()
+ * .tblNames()
  *      Array of dataflow names for which a table has been created.
  *      Arguments: none.
  *      Return: array of dataflow names.
@@ -95,6 +89,11 @@
  *
  * .varDims()
  *      Array of variable dimensions for a certain dataflow. These are used in fetching data to store in the table (see .fetchData, below).
+ *      Arguments: dataflow name.
+ *      Return: clone of array of dimension names.
+ *
+ * .fixDims()
+ *      Array of fixed dimensions for a certain dataflow. These are used in fetching data to store in the table (see .fetchData, below).
  *      Arguments: dataflow name.
  *      Return: clone of array of dimension names.
  *
@@ -188,6 +187,9 @@
 //http://epp.eurostat.ec.europa.eu/portal/page/portal/sdmx_web_services/getting_started/a_few_useful_points
 //TODO: check if more success when moving TIME_PERIOD to end of dimensions array, always.
 //TODO: turn into ECMA6
+//TODO: find records with OBS_FLAG="i"
+//TODO: see how to get records with OBS_FLAG "exists"
+//TODO: Need to 'translate' in parseDsd?
 
 //Make sure Object.keys function is available in all browsers. May be removed in due time.
 if (typeof Object.keys != 'function') {
@@ -270,7 +272,7 @@ function eurostatDb () {
         return dfs;
     }
 
-    esDb.namesWithDsd = function () {return dsds.map(function(dsd){return dsd.name;});};
+    esDb.dsdNames = function () {return dsds.map(function(dsd){return dsd.name;});};
     esDb.dsd = function (name) {return $.extend(true, {}, getDsd(name));}; //immutable.
     esDb.fetchDsd = function (name, callback) {
         //Get data flow definition from certain table and add to corresponding dsd array.
@@ -341,11 +343,6 @@ function eurostatDb () {
 
         return dsd;
     }
-    esDb.codelist = function(name, fldName) {
-        //Array of the names, and the meaning, of the codes that a field or dimension may take.
-        if (!fldName) return $.extend(true, {}, getDsd(name).codelists);
-        else return $.extend([], $.grep(getDsd(name).codelists, function(codelist){return codelist.name === fldName;})[0].codes);
-    };
     esDb.codelistDict = function(name, fldName) {
         var dict = {};
         if (!name) {
@@ -435,10 +432,11 @@ function eurostatDb () {
         if (typeof callback === "function") callback(null, $.extend(true,{},tbl));
         return esDb;
     };
-    esDb.namesWithTbl = function (){return tbls.map(function(tbl){return tbl.name;});};
+    esDb.tblNames = function (){return tbls.map(function(tbl){return tbl.name;});};
     esDb.tbl = function(name) {return $.extend(true, {}, getTbl(name));}; //immutable
     esDb.fields = function(name) {return $.extend([], getTbl(name).fields);}; //Array of fields that are stored in a certain table.
     esDb.varDims = function(name) {return $.extend([], getTbl(name).varDims);}; //Array of variable dimensions in fetching data for a certain table.
+    esDb.fixDims = function(name) {return $.extend([], getTbl(name).fixDims);}; //Array of fixed dimensions in fetching data for a certain table.
     esDb.fixDimFilter = function(name) {return $.extend([], getTbl(name).fixDimFilter);}; //Object of fixed dimensions, and their values, for a certain table.
 
     esDb.fetchData = function (name, varDimFilters, callback) {
@@ -578,7 +576,7 @@ function eurostatDb () {
             return esDb;
         }
         //Fetch (missing) data, get recordset, and use in callback.
-        db.fetchData(name, varDimFilter(tbl, fieldFilter), function (error) {
+        esDb.fetchData(name, varDimFilter(tbl, fieldFilter), function (error) {
             if (!error) {
                 try {var rst = esDb.getRst(name, fieldFilter, order);}
                 catch (e) {error = e;}
@@ -587,7 +585,7 @@ function eurostatDb () {
         });
         return esDb;
     };
-    function varDimFilter(tbl, fieldFilter){ //Turn fieldFilter into varDimFilter, for use in .fetchData().
+    function varDimFilter(tbl, fieldFilter){
         var varDimFilter = {};
         tbl.varDims.forEach(function (varDim) {
             var val = fieldFilter[varDim];
@@ -595,7 +593,7 @@ function eurostatDb () {
             else varDimFilter[varDim] = val;
         });
         return varDimFilter;
-    }
+    } //Turn fieldFilter into varDimFilter, for use in .fetchData().
 
     function allPropValCombinations(obj) {
         //From an object, of which the properties are arrays of values, create an array of objects, of which the properties

@@ -5,11 +5,11 @@
 
 db = eurostatDb();
 db.initTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015}, function () {//1
-    db.fetchRst("demo_pjan", {SEX: "T", GEO: "NL", OBS_VALUE: {gt: 16e6}}, function (error, rst) {//2
+    db.fetchRst("demo_pjan", {SEX: "T", GEO:"NL"}, function (error, rst) {//2
 
-        $("div#info").append("<h2>Total population in the Netherlands (years with >16 million):</h2>");
-        if (error) {$("div#info").append("<p>Error: " + error.message + "</p>");return;}
-        rst.forEach(function (r) {$("div#info").append("<p>In " + r.TIME + ": " + r.OBS_VALUE + "</p>");}); //3
+        $("div#info").prepend("<h2>Total population in the Netherlands:</h2>");
+        if (error) {alert (error); return;}
+        rst.forEach(function(r) {$("ul").append("<li>In " + r.TIME + ": " + r.OBS_VALUE + "</li>");});//3
     });
 });
 //What's happening here?
