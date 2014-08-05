@@ -188,7 +188,7 @@ Note that with ```.getRst()``` can only get recordsets that have already been fe
 
 ####Concluding
 
-There's more we can do, have a look in the documentation at the beginning of the ```eurostatDb.js``` file.
+There's more we can do, have a look in the documentation in the wiki!
 
 
 
