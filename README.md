@@ -34,7 +34,7 @@ eurostatDb.js depends on
 
 so be sure to include those. 
 
-Also, the file `all_latest_ESTAT_references=none_detail=full.xml` which contains the dataflow names and descriptions, must be located in the `/js` directory.
+Also, the file `all_latest_ESTAT_references=none_detail=full.xml` which contains the dataflow names and descriptions, must be located in the `js/` directory.
 
 
 ## Suggestions
