@@ -1,0 +1,63 @@
+{
+    "GenericData": {
+        "Header": {
+            "ID": {
+                "__prefix": "message",
+                "__text": "8a141e417ab56e0995a21fcfa7262f7f"
+            },
+            "Test": {
+                "__prefix": "message",
+                "__text": "false"
+            },
+            "Prepared": {
+                "__prefix": "message",
+                "__text": "2014-08-11T18:40:59"
+            },
+            "Sender": {
+                "Name": {
+                    "_xml:lang": "en",
+                    "__prefix": "common",
+                    "__text": "Eurostat"
+                },
+                "Timezone": {
+                    "__prefix": "message",
+                    "__text": "+01:00"
+                },
+                "_id": "ESTAT",
+                "__prefix": "message"
+            },
+            "Receiver": {
+                "_id": "RECEIVER",
+                "__prefix": "message"
+            },
+            "DataSetAction": {
+                "__prefix": "message",
+                "__text": "Append"
+            },
+            "DataSetID": {
+                "__prefix": "message",
+                "__text": "DS-008573"
+            },
+            "__prefix": "message"
+        },
+        "Footer": {
+            "Message": {
+                "Text": {
+                    "_xml:lang": "en",
+                    "__prefix": "common",
+                    "__text": "Cannot connect to NavTree service."
+                },
+                "_code": "500",
+                "_severity": "Warning",
+                "__prefix": "footer"
+            },
+            "__prefix": "footer"
+        },
+        "_xmlns:footer": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer",
+        "_xmlns:generic": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic",
+        "_xmlns:common": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common",
+        "_xmlns:message": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
+        "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+        "__prefix": "message"
+    }
+}

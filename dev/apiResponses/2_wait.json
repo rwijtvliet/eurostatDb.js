@@ -1,0 +1,92 @@
+{
+    "GenericData": {
+        "Header": {
+            "ID": {
+                "__prefix": "message",
+                "__text": "a61bc64aa0d24615e809abeccf3d8744"
+            },
+            "Test": {
+                "__prefix": "message",
+                "__text": "false"
+            },
+            "Prepared": {
+                "__prefix": "message",
+                "__text": "2014-08-11T18:14:23"
+            },
+            "Sender": {
+                "Name": {
+                    "_xml:lang": "en",
+                    "__prefix": "common",
+                    "__text": "Eurostat"
+                },
+                "Timezone": {
+                    "__prefix": "message",
+                    "__text": "+01:00"
+                },
+                "_id": "ESTAT",
+                "__prefix": "message"
+            },
+            "Receiver": {
+                "_id": "RECEIVER",
+                "__prefix": "message"
+            },
+            "Structure": {
+                "Structure": {
+                    "Ref": {
+                        "_agencyID": "ESTAT",
+                        "_id": "DSD_demo_mlifetable",
+                        "_version": "1.0"
+                    },
+                    "__prefix": "common"
+                },
+                "_structureID": "ESTAT_DSD_demo_mlifetable_1_0",
+                "_dimensionAtObservation": "TIME_PERIOD",
+                "__prefix": "message"
+            },
+            "DataSetAction": {
+                "__prefix": "message",
+                "__text": "Append"
+            },
+            "DataSetID": {
+                "__prefix": "message",
+                "__text": "demo_mlifetable"
+            },
+            "__prefix": "message"
+        },
+        "DataSet": {
+            "_structureRef": "ESTAT_DSD_demo_mlifetable_1_0",
+            "__prefix": "message"
+        },
+        "Footer": {
+            "Message": {
+                "Text": [
+                    {
+                        "_xml:lang": "en",
+                        "__prefix": "common",
+                        "__text": "Due to the large query the response will be written to a file which will be located under URL: http://ec.europa.eu/eurostat/SDMX/diss-web/file/hkP7COtuesYO5t1I"
+                    },
+                    {
+                        "_xml:lang": "en",
+                        "__prefix": "common",
+                        "__text": "http://ec.europa.eu/eurostat/SDMX/diss-web/file/hkP7COtuesYO5t1I"
+                    },
+                    {
+                        "_xml:lang": "en",
+                        "__prefix": "common",
+                        "__text": "Please check the location periodic every 5 minutes or at your preference."
+                    }
+                ],
+                "_code": "413",
+                "_severity": "Infomation",
+                "__prefix": "footer"
+            },
+            "__prefix": "footer"
+        },
+        "_xmlns:footer": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer",
+        "_xmlns:generic": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic",
+        "_xmlns:common": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common",
+        "_xmlns:message": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
+        "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+        "__prefix": "message"
+    }
+}

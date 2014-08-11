@@ -1,0 +1,223 @@
+{
+    "GenericData": {
+        "Header": {
+            "ID": {
+                "__prefix": "message",
+                "__text": "6ee1743814c1dbf7ad529afb44a0e95d"
+            },
+            "Test": {
+                "__prefix": "message",
+                "__text": "false"
+            },
+            "Prepared": {
+                "__prefix": "message",
+                "__text": "2014-08-11T18:26:08"
+            },
+            "Sender": {
+                "Name": {
+                    "_xml:lang": "en",
+                    "__prefix": "common",
+                    "__text": "Eurostat"
+                },
+                "Timezone": {
+                    "__prefix": "message",
+                    "__text": "+01:00"
+                },
+                "_id": "ESTAT",
+                "__prefix": "message"
+            },
+            "Receiver": {
+                "_id": "RECEIVER",
+                "__prefix": "message"
+            },
+            "Structure": {
+                "Structure": {
+                    "Ref": {
+                        "_agencyID": "ESTAT",
+                        "_id": "DSD_demo_mlifetable",
+                        "_version": "1.0"
+                    },
+                    "__prefix": "common"
+                },
+                "_structureID": "ESTAT_DSD_demo_mlifetable_1_0",
+                "_dimensionAtObservation": "TIME_PERIOD",
+                "__prefix": "message"
+            },
+            "DataSetAction": {
+                "__prefix": "message",
+                "__text": "Append"
+            },
+            "DataSetID": {
+                "__prefix": "message",
+                "__text": "demo_mlifetable"
+            },
+            "__prefix": "message"
+        },
+        "DataSet": {
+            "Series": {
+                "SeriesKey": {
+                    "Value": [
+                        {
+                            "_id": "AGE",
+                            "_value": "Y9",
+                            "__prefix": "generic"
+                        },
+                        {
+                            "_id": "SEX",
+                            "_value": "T",
+                            "__prefix": "generic"
+                        },
+                        {
+                            "_id": "INDIC_DE",
+                            "_value": "LIFEXP",
+                            "__prefix": "generic"
+                        },
+                        {
+                            "_id": "GEO",
+                            "_value": "CZ",
+                            "__prefix": "generic"
+                        },
+                        {
+                            "_id": "FREQ",
+                            "_value": "A",
+                            "__prefix": "generic"
+                        }
+                    ],
+                    "__prefix": "generic"
+                },
+                "Obs": [
+                    {
+                        "ObsDimension": {
+                            "_value": "2010",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "69.0",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2009",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "68.7",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2008",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "68.6",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2007",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "68.4",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2006",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "68.1",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2005",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "67.5",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2004",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "67.3",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2003",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "66.7",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2002",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "66.9",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2001",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "66.8",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    },
+                    {
+                        "ObsDimension": {
+                            "_value": "2000",
+                            "__prefix": "generic"
+                        },
+                        "ObsValue": {
+                            "_value": "66.5",
+                            "__prefix": "generic"
+                        },
+                        "__prefix": "generic"
+                    }
+                ],
+                "__prefix": "generic"
+            },
+            "_structureRef": "ESTAT_DSD_demo_mlifetable_1_0",
+            "__prefix": "message"
+        },
+        "_xmlns:footer": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer",
+        "_xmlns:generic": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic",
+        "_xmlns:common": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common",
+        "_xmlns:message": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
+        "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+        "__prefix": "message"
+    }
+}

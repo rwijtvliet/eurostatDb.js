@@ -19,6 +19,8 @@
  *
  * DESCRIPTION OF METHODS
  *
+ * comprehensive information on https://github.com/rwijtvliet/eurostatDb.js
+ *
  * .fetchDfs()
  *      Prepare dataflow objects that describe what data are available from eurostat server. (asynchronous)
  *      Arguments: (optional) filter word, or array with filter words, of which dataflow name or dataflow description must include >=1 to be saved. If omitted or "": all available on eurostat server.
@@ -182,14 +184,9 @@
  */
 
 
-
 //TODO: count expected return size, check if exceeds limit of 1 000 000
-//http://epp.eurostat.ec.europa.eu/portal/page/portal/sdmx_web_services/getting_started/a_few_useful_points
-//TODO: check if more success when moving TIME_PERIOD to end of dimensions array, always.
 //TODO: turn into ECMA6
-//TODO: find records with OBS_FLAG="i"
-//TODO: see how to get records with OBS_FLAG "exists"
-//TODO: Need to 'translate' in parseDsd?
+//TODO: find out how the informational flag (OBS_FLAG="i") is represented in metadata --> answer: not necessary; "i" is deprecated.
 
 //Make sure Object.keys function is available in all browsers. May be removed in due time.
 if (typeof Object.keys != 'function') {
@@ -255,7 +252,7 @@ function eurostatDb () {
             //Filter, if needed.
             if (filter) {
                 add = false;
-                arrayIfNot(filter).forEach(function(filterTerm) {
+                [].concat(filter).forEach(function(filterTerm) {
                     if (add) return;
                     if (df.name.toLowerCase().indexOf(filterTerm.toLowerCase()) > -1) add = true;
                     df.descrs.forEach(function (descr) {
@@ -312,7 +309,7 @@ function eurostatDb () {
 
         //Parse: dimensions.
         dsdXml = converter.xml2json(xml);
-        arrayIfNot(dsdXml["Structure"]["Structures"]["DataStructures"]["DataStructure"]["DataStructureComponents"]["DimensionList"]["Dimension"]).forEach(function(dim) {
+        [].concat(dsdXml["Structure"]["Structures"]["DataStructures"]["DataStructure"]["DataStructureComponents"]["DimensionList"]["Dimension"]).forEach(function(dim) {
             dsd.dimensions[+(dim._position) - 1] = dim["_id"];
         });
         var t = dsdXml["Structure"]["Structures"]["DataStructures"]["DataStructure"]["DataStructureComponents"]["DimensionList"]["TimeDimension"];
@@ -324,13 +321,13 @@ function eurostatDb () {
             dsd.dimensions.push(timeDim);//add at end
         }
         //Parse: concepts.
-        arrayIfNot(dsdXml["Structure"]["Structures"]["Concepts"]["ConceptScheme"]["Concept"]).forEach(function(con) {
+        [].concat(dsdXml["Structure"]["Structures"]["Concepts"]["ConceptScheme"]["Concept"]).forEach(function(con) {
             dsd.concepts.push(con["_id"]);
         });
         //Parse: codelists.
-        arrayIfNot(dsdXml["Structure"]["Structures"]["Codelists"]["Codelist"]).forEach(function(clist) {
+        [].concat(dsdXml["Structure"]["Structures"]["Codelists"]["Codelist"]).forEach(function(clist) {
             var codes = [];
-            arrayIfNot(clist["Code"]).forEach(function(code){
+            [].concat(clist["Code"]).forEach(function(code){
                 codes.push({
                     name: code["_id"],
                     descr: code["Name"]["__text"]
@@ -352,11 +349,15 @@ function eurostatDb () {
             var names = dsds.map(function (dsd) {return dsd.name;});
             names.forEach(function (name) {dict[name] = esDb.codelistDict(name);});
         } else if (!fldName) {
-            var fldNames = getDsd(name).codelists.map(function (codelist) {return codelist.name;});
-            fldNames.forEach(function (fldName) {dict[fldName] = esDb.codelistDict(name, fldName)});
+            try {
+                var fldNames = getDsd(name).codelists.map(function(codelist){return codelist.name;});
+                fldNames.forEach(function (fldName) {dict[fldName] = esDb.codelistDict(name, fldName)});
+            } catch(e) {throw Error("Dsd for " + name + " not found");}
         } else {
-            var codes = $.grep(getDsd(name).codelists, function(codelist){return codelist.name === fldName;})[0].codes;
-            codes.forEach(function (code) {dict[code.name] = code.descr;});
+            try {
+                var codes = $.grep(getDsd(name).codelists, function(codelist){return codelist.name === fldName;})[0].codes; //problem if fldName not found
+                codes.forEach(function (code) {dict[code.name] = code.descr;});
+            } catch(e) {throw Error("Dsd for " + name + ", or fieldname " + fldName + " not found");}
         }
         return dict;
     };
@@ -386,7 +387,7 @@ function eurostatDb () {
             i = tblIndex(name);
         if (!(dsd)) {
             esDb.fetchDsd(name, function(error){
-                if (error) callback(error);
+                if (error && (typeof callback === "function")) callback(error);
                 else esDb.initTable(name, fixDimFilter, timePeriod, callback)
             });//retry to add table when dsd is fetched
             return esDb;
@@ -461,29 +462,29 @@ function eurostatDb () {
             callback(errors, fetchedData);
         }
 
-        if (!(varDimFilters instanceof Array)) varDimFilters = [varDimFilters];
-        varDimFilters.forEach(function (varDimFilter) {
+        [].concat(varDimFilters).forEach(function (varDimFilter) {
             //varDimFilter: single object with properties that are value arrays. singlevalFilters(varDimFilter): array of objects with properties that are single values.
             singlevalFilters(varDimFilter).forEach(function (filter) {
-                if (!(tbl.data(filter).count())) {
-                    try {var url = dataUrl(tbl.name, filter);}
-                    catch (e) {errCollect(e); return;}
-                    inflight++;
-                    $.get(url)
-                        .done(function (xml) {
-                            console.log("                  "+ url);//DEBUG
-                            try {
-                                var records = parseDataXml(xml, tbl.fields); //might throw error
-                                if (records) {tbl.data.insert(records);
-                                fetchedData = fetchedData.concat(records);}
-                            } catch (e) {errCollect(e);}
-                        })
-                        .fail(function (xhr, textStatus, e) {errCollect(e);})
-                        .always(function () {
-                            inflight--;
-                            checkFinished();
-                        });
-                }
+
+                if (tbl.data(fieldFilter(filter)).count()) return;
+
+                try {var url = dataUrl(tbl.name, filter);}
+                catch (e) {errCollect(e); return;}
+                inflight++;
+                $.get(url)
+                    .done(function (xml) {
+                        //console.log(url);//DEBUG
+                        try {
+                            var records = parseDataXml(xml, tbl.fields); //might throw error
+                            if (records) {tbl.data.insert(records);
+                            fetchedData = fetchedData.concat(records);}
+                        } catch (e) {errCollect(e);}
+                    })
+                    .fail(function (xhr, textStatus, e) {errCollect(e);})
+                    .always(function () {
+                        inflight--;
+                        checkFinished();
+                    });
             });
         });
         checkFinished();
@@ -501,8 +502,7 @@ function eurostatDb () {
             if (tbl.fixDimFilter.hasOwnProperty(dim)) dimVal = tbl.fixDimFilter[dim];
             else if (varDimFilter.hasOwnProperty(dim)) dimVal = varDimFilter[dim];
             else throw Error("Value for dimension '" + dim + "' (in table definition) given neither by table definition nor by the user. Use '' (empty string) to get all possible values for this dimension.");
-            if (!(dimVal instanceof Array)) dimVal = [dimVal];//increase robustness, in case of only one value that's not put in 1-element array.
-            dimVals.push(dimVal);
+            dimVals.push([].concat(dimVal));
         });
         dimString = dimVals.map(function (e) {return e.join("+");}).join(".");
         url += dimString;
@@ -515,19 +515,25 @@ function eurostatDb () {
             converter = new X2JS();
 
         xmlData = converter.xml2json(xml);
-        if (!xmlData.hasOwnProperty("GenericData")) throw Error("Unexpected xml document. Node 'GenericData' not found");
+        if (!xmlData.hasOwnProperty("GenericData")) throw Error("Unexpected xml document; node 'GenericData' not found");
         if (!xmlData["GenericData"].hasOwnProperty("DataSet")) {
-            if (!xmlData["GenericData"].hasOwnProperty("Footer") || !xmlData["GenericData"]["Footer"].hasOwnProperty("Message") || !xmlData["GenericData"]["Footer"]["Message"].hasOwnProperty("Text")) throw "Unexpected xml document; nodes 'GenericData/DataSet'  AND 'GenericData/Footer/Message/Text' not found.";
-            else throw Error("Unexpected xml document. Message from server: " + xmlData["GenericData"]["Footer"]["Message"]["Text"]["__text"]);
+            if (!xmlData["GenericData"].hasOwnProperty("Footer") || !xmlData["GenericData"]["Footer"].hasOwnProperty("Message") || !xmlData["GenericData"]["Footer"]["Message"].hasOwnProperty("Text")) throw Error("Unexpected xml document; nodes 'GenericData/DataSet'  AND 'GenericData/Footer/Message/Text' not found.");
+            else {
+                var errText = [].concat(xmlData["GenericData"]["Footer"]["Message"]["Text"]).map(function(t){return t["__text"]}).join(", ");
+                throw Error(errText);
+            }
         }
 
-        if (!xmlData["GenericData"]["DataSet"].hasOwnProperty("Series")) { //empty dataset, no results found!
-            return newData; //empty
+        if (!xmlData["GenericData"]["DataSet"].hasOwnProperty("Series")) { //empty dataset, no results found OR too many results (wait and download later)
+            var errText = [].concat(xmlData["GenericData"]["Footer"]["Message"]["Text"]).map(function(t){return t["__text"]}).join(", ");
+            //No results found.
+            if (errText === "No Results Found") return []; //empty
+            //Too many for immediate return; must be downloaded later (show as error).
+            else throw Error("Too many records to add immediately. (" + errText + ") Try again with more narrow query.");
         }
         xmlData = xmlData["GenericData"]["DataSet"]["Series"];//chop off uninteresting part
 
-        if (!(xmlData instanceof Array)) xmlData = [xmlData];//fix: problem with array if only 1 data set
-        xmlData.forEach(function (d) {
+        [].concat(xmlData).forEach(function (d) { //turn into array if only 1 data set
             //get all data that remains the same (=unit, country, product, indic_nrg, ...) in series
             var v_base = {};
             d["SeriesKey"]["Value"].forEach(function (skv, i) {
@@ -535,8 +541,7 @@ function eurostatDb () {
                 if (fields.indexOf(key) > -1) v_base[key] = skv["_value"];
             });
             //get all value and year data from series
-            if (!(d["Obs"] instanceof Array)) d["Obs"] = [d["Obs"]];//fix: problem with array if only 1 observation value in data set
-            d["Obs"].forEach(function (o) {
+            [].concat(d["Obs"]).forEach(function (o) { //turn into array if only 1 observation value in data set
                 var v = $.extend({}, v_base); //copy
                 v.TIME = Number(o["ObsDimension"]["_value"]);
                 if (o.hasOwnProperty("Attributes") && o["Attributes"].hasOwnProperty("Value") && o["Attributes"]["Value"].hasOwnProperty("_id") && o["Attributes"]["Value"]["_id"] === "OBS_STATUS") {
@@ -598,6 +603,14 @@ function eurostatDb () {
         });
         return varDimFilter;
     } //Turn fieldFilter into varDimFilter, for use in .fetchData().
+    function fieldFilter(varDimFilter){
+        var fieldFilter = {};
+        Object.keys(varDimFilter).forEach(function(varDim){
+            var val = varDimFilter[varDim];
+            if (val !== "") fieldFilter[varDim] = val;
+        });
+        return fieldFilter;
+    } //Turn varDimFilter into fieldFilter, for use in taffy().
 
     function allPropValCombinations(obj) {
         //From an object, of which the properties are arrays of values, create an array of objects, of which the properties
@@ -634,8 +647,6 @@ function eurostatDb () {
     function tblIndex(name) {return tbls.map(function(tbl){return tbl.name;}).indexOf(name);}
 
     function pop(obj, key) {var value = {}; value[key] = obj[key]; delete obj[key]; return value;}
-
-    function arrayIfNot(arr) {return (arr instanceof Array) ? arr : [arr];}//turn into array, if it wasn't. (useful for forEach loops)
 
     return esDb;
 }

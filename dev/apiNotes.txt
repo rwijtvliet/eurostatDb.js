@@ -1,0 +1,25 @@
+notes/questions
+
+
+problem 1
+
+following urls return same file:
+ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nrg_100a/A.TJ.0000.B_100100.NL+FR.all/
+ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nrg_100a/A.TJ.0000.B_100100.NL+FR.all/?detail=dataonly
+ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nrg_100a/A.TJ.0000.B_100100.NL+FR.all/?dimensionAtObservation=PRODUCT
+even though according to http://sdmx.org/wp-content/uploads/2013/09/SDMX_2_1-SECTION_07_WebServicesGuidelines_2013-04.pdf section 4.4.2.2 they shoulb be different.
+
+This DOES make a difference in the file that's returned:
+ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nrg_100a/A.TJ.0000.B_100100.NL+FR.all/?startPeriod=2008
+
+
+problem 2
+
+http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/DS-008573/M.003.27101250.VALUE..IMPORTS
+
+returns error code="500", severity="Warning", "Cannot connect to NavTree service"
+
+
+problem 3
+
+What is meaning of TIME_PERIOD dimension?

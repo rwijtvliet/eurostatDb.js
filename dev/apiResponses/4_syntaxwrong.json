@@ -1,0 +1,63 @@
+{
+    "GenericData": {
+        "Header": {
+            "ID": {
+                "__prefix": "message",
+                "__text": "5131e88d9a461e3532674e2a84dc478b"
+            },
+            "Test": {
+                "__prefix": "message",
+                "__text": "false"
+            },
+            "Prepared": {
+                "__prefix": "message",
+                "__text": "2014-08-11T18:37:45"
+            },
+            "Sender": {
+                "Name": {
+                    "_xml:lang": "en",
+                    "__prefix": "common",
+                    "__text": "Eurostat"
+                },
+                "Timezone": {
+                    "__prefix": "message",
+                    "__text": "+01:00"
+                },
+                "_id": "ESTAT",
+                "__prefix": "message"
+            },
+            "Receiver": {
+                "_id": "RECEIVER",
+                "__prefix": "message"
+            },
+            "DataSetAction": {
+                "__prefix": "message",
+                "__text": "Append"
+            },
+            "DataSetID": {
+                "__prefix": "message",
+                "__text": "demo_mlifetable"
+            },
+            "__prefix": "message"
+        },
+        "Footer": {
+            "Message": {
+                "Text": {
+                    "_xml:lang": "en",
+                    "__prefix": "common",
+                    "__text": "Error caused by the caller due to incorrect or semantically invalid arguments"
+                },
+                "_code": "400",
+                "_severity": "Error",
+                "__prefix": "footer"
+            },
+            "__prefix": "footer"
+        },
+        "_xmlns:footer": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer",
+        "_xmlns:generic": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic",
+        "_xmlns:common": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common",
+        "_xmlns:message": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
+        "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+        "__prefix": "message"
+    }
+}

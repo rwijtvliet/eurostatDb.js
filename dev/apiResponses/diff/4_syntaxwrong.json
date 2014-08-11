@@ -1,0 +1,45 @@
+{
+    "GenericData": {
+        "Header": {
+            //a
+
+
+
+
+
+
+            //no Structure
+
+
+
+
+
+
+            //b
+        },
+
+
+        //no Dataset
+
+
+        "Footer": {
+            "Message": {
+                "Text": {
+                    "_xml:lang": "en",
+                    "__prefix": "common",
+                    "__text": "Error caused by the caller due to incorrect or semantically invalid arguments"
+                },
+                "_code": "400",
+                "_severity": "Error",
+                "__prefix": "footer"
+            },
+            "__prefix": "footer"
+        },
+        "_xmlns:footer": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer",
+        "_xmlns:generic": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic",
+        "_xmlns:common": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common",
+        "_xmlns:message": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
+        "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+        "__prefix": "message"
+    }
+}

@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>eurostatDb.js</title>
-    <style>ul li {display:inline} .started {background-color: #aaa} .ok {background-color: #4f4} .notok {background-color:#a7b}</style>
+    <style>ul li {display:inline} .started {background-color: #aaa} .ok {background-color: #4f4} .notok {background-color:#a7b} .error {background-color:#f66}</style>
 </head>
 <body>
 
@@ -12,20 +12,26 @@
 
     <div id="info"></div>
     <h2>Requests...</h2>
-    <span class="started">started </span><span class="ok">finished (ok) </span><span class="notok">not ok </span>
+    <span class="started">started </span><span class="ok">finished (ok) </span><span class="notok">not ok </span><span class="error"> error </span>
     <ul></ul>
 
+    <h2>Errors</h2>
+    <h4>dataflownames</h4>
+    <p id="ERRORNAMES"></p>
+    <h4>results</h4>
+    <div id="ERRORS"></div>
+
     <h2>OK</h2>
+    <h4>dataflownames</h4>
+    <p id="OKNAMES"></p>
     <h4>results</h4>
     <div id="OK"></div>
-    <h4>dataflownames</h4>
-    <div id="OKNAMES"></div>
 
     <h2>Problematic</h2>
+    <h4>dataflownames</h4>
+    <p id="NOTOKNAMES"></p>
     <h4>results</h4>
     <div id="NOTOK"></div>
-    <h4>dataflownames</h4>
-    <div id="NOTOKNAMES"></div>
 
     <script type="text/javascript" src="js/vendor/jQuery/jquery-2.1.1"></script>
     <script type="text/javascript" src="js/vendor/x2js-v1.1.5/xml2json.js"></script>
