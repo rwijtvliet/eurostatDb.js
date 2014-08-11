@@ -387,8 +387,11 @@ function eurostatDb () {
             i = tblIndex(name);
         if (!(dsd)) {
             esDb.fetchDsd(name, function(error){
-                if (error && (typeof callback === "function")) callback(error);
-                else esDb.initTable(name, fixDimFilter, timePeriod, callback)
+                if (error) {
+                    if (typeof callback === "function") callback(error);
+                } else {
+                    esDb.initTable(name, fixDimFilter, timePeriod, callback)
+                }
             });//retry to add table when dsd is fetched
             return esDb;
         }
@@ -512,20 +515,21 @@ function eurostatDb () {
     function parseDataXml(xml, fields){
         var xmlData, //data series as in xml file
             newData = [], //data series as wanted
-            converter = new X2JS();
+            converter = new X2JS(),
+            errText;
 
         xmlData = converter.xml2json(xml);
         if (!xmlData.hasOwnProperty("GenericData")) throw Error("Unexpected xml document; node 'GenericData' not found");
         if (!xmlData["GenericData"].hasOwnProperty("DataSet")) {
             if (!xmlData["GenericData"].hasOwnProperty("Footer") || !xmlData["GenericData"]["Footer"].hasOwnProperty("Message") || !xmlData["GenericData"]["Footer"]["Message"].hasOwnProperty("Text")) throw Error("Unexpected xml document; nodes 'GenericData/DataSet'  AND 'GenericData/Footer/Message/Text' not found.");
             else {
-                var errText = [].concat(xmlData["GenericData"]["Footer"]["Message"]["Text"]).map(function(t){return t["__text"]}).join(", ");
+                errText = [].concat(xmlData["GenericData"]["Footer"]["Message"]["Text"]).map(function(t){return t["__text"]}).join(", ");
                 throw Error(errText);
             }
         }
 
         if (!xmlData["GenericData"]["DataSet"].hasOwnProperty("Series")) { //empty dataset, no results found OR too many results (wait and download later)
-            var errText = [].concat(xmlData["GenericData"]["Footer"]["Message"]["Text"]).map(function(t){return t["__text"]}).join(", ");
+            errText = [].concat(xmlData["GenericData"]["Footer"]["Message"]["Text"]).map(function(t){return t["__text"]}).join(", ");
             //No results found.
             if (errText === "No Results Found") return []; //empty
             //Too many for immediate return; must be downloaded later (show as error).
@@ -536,7 +540,7 @@ function eurostatDb () {
         [].concat(xmlData).forEach(function (d) { //turn into array if only 1 data set
             //get all data that remains the same (=unit, country, product, indic_nrg, ...) in series
             var v_base = {};
-            d["SeriesKey"]["Value"].forEach(function (skv, i) {
+            d["SeriesKey"]["Value"].forEach(function (skv) {
                 var key = skv["_id"];
                 if (fields.indexOf(key) > -1) v_base[key] = skv["_value"];
             });
