@@ -31,9 +31,10 @@ eurostatDb.js depends on
 * jQuery (http://jquery.com/)
 * xml2json (https://github.com/abdmob/x2js) to convert xml into json
 * taffydb (https://github.com/typicaljoe/taffydb) to store information
+
 so be sure to include those. 
 
-Also, the file `all_latest_ESTAT_references=none_detail=full.xml` which contains the dataflow names and descriptions, must be located in the `/js` directory.
+Also, the file `all_latest_ESTAT_references=none_detail=full.xml` which contains the dataflow names and descriptions, must be located in the `js/` directory.
 
 
 ## Suggestions
