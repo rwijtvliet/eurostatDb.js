@@ -343,6 +343,17 @@ function eurostatDb () {
 
         return dsd;
     }
+    esDb.codelist = function(name, fldName) {
+        if (!fldName) {
+            try {
+                return getDsd(name).codelists;
+            } catch(e) {throw Error("Dsd for " + name + " not found");}
+        } else {
+            try {
+                return $.grep(getDsd(name).codelists, function(codelist){return codelist.name === fldName;})[0].codes;
+            } catch(e) {throw Error("Dsd for " + name + ", or fieldname " + fldName + " not found");}
+        }
+    };
     esDb.codelistDict = function(name, fldName) {
         var dict = {};
         if (!name) {
