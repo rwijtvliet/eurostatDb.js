@@ -191,7 +191,7 @@
 //Make sure Object.keys function is available in all browsers. May be removed in due time.
 if (typeof Object.keys != 'function') {
     Object.keys = function(obj) {
-        if (typeof obj != "object" && typeof obj != "function" || obj == null) throw TypeError("Object.keys called on non-object");
+        if (typeof obj != "object" && typeof obj != "function" || obj == null) throw new TypeError("Object.keys called on non-object");
         var keys = [];
         for (var p in obj) obj.hasOwnProperty(p) && keys.push(p);
         return keys;
@@ -374,28 +374,32 @@ function eurostatDb () {
     };
     esDb.dimensions = function(name) {return $.extend([], getDsd(name).dimensions);}; //Array of all the dimensions.
 
-    esDb.initTable = function (/*name, fixDimFilter, timePeriod, callback*/) {
+    esDb.initTable = function (name, fixDimFilter, timePeriod, callback) {
         //Get arguments straight.
-        var name = arguments[0],
-            fixDimFilter,
-            timePeriod,
-            callback,
-            n = arguments.length;
-        if (n >= 2) {
-            if (typeof arguments[n-1] === "function") {callback = arguments[n-1]; n--;}// if last argument is function, it is the callback.
-            if (n === 3) {
+        var n = arguments.length;
+        if (n === 2 || n === 3) {
+            if (typeof arguments[n-1] === "function") {callback = arguments[n-1]; n--;}// if last argument is function, it is the callback. Otherwise, the callback is undefined (automatically).
+            if (n === 3) {//both were passed
                 fixDimFilter = arguments[1];
                 timePeriod = arguments[2];
-            } else if (n === 2) {
-                if (arguments[1].hasOwnProperty("startYear") || arguments[1].hasOwnProperty("endYear")) timePeriod = arguments[1];
-                else fixDimFilter = arguments[1];
+            } else if (n === 1) {//neither was passed
+                fixDimFilter = undefined;
+                timePeriod = undefined;
+            } else {//one was passed
+                if (arguments[1] && (arguments[1].hasOwnProperty("startYear") || arguments[1].hasOwnProperty("endYear"))) {
+                    timePeriod = arguments[1];
+                    fixDimFilter = undefined;
+                } else {
+                    fixDimFilter = arguments[1];
+                    timePeriod = undefined;
+                }
             }
         }
+        if (fixDimFilter && !Object.keys(fixDimFilter).length) fixDimFilter = undefined; //empty object --> undefined
+        if (timePeriod && !Object.keys(timePeriod).length) timePeriod = undefined; //empty object --> undefined
 
-        //Make sure dsd does, and tbl does not, yet exist.
-        var dsd = getDsd(name),
-            tbl,
-            i = tblIndex(name);
+        //Make sure dsd does already exist.
+        var dsd = getDsd(name);
         if (!(dsd)) {
             esDb.fetchDsd(name, function(error){
                 if (error) {
@@ -406,11 +410,15 @@ function eurostatDb () {
             });//retry to add table when dsd is fetched
             return esDb;
         }
-        if (i > -1) {tbls[i] = tbls[tbls.length-1]; tbls.pop();} //Table is already in db; delete.
+
+        //Check if tbl does already exist. If so, delete
+        var tbl = getTbl(name);
+        if (tbl) {tbls[tblIndex(name)] = tbls[tbls.length-1]; tbls.pop();} //Table is already in db; delete.
 
         //Make table.
         tbl = {
             name: name,
+            /*archive: {fixDimFilter: fixDimFilter, timePeriod: timePeriod},//arguments with which table was initialised*/
             fixDims: [],
             fixDimFilter: {},
             varDims: [],
@@ -451,7 +459,7 @@ function eurostatDb () {
         return esDb;
     };
     esDb.tblNames = function (){return tbls.map(function(tbl){return tbl.name;});};
-    esDb.tbl = function(name) {return $.extend(true, {}, getTbl(name));}; //immutable
+    esDb.tbl = function(name) {var tbl = getTbl(name); if (!tbl) return undefined; else return $.extend(true, {}, tbl);}; //immutable
     esDb.fields = function(name) {return $.extend([], getTbl(name).fields);}; //Array of fields that are stored in a certain table.
     esDb.varDims = function(name) {return $.extend([], getTbl(name).varDims);}; //Array of variable dimensions in fetching data for a certain table.
     esDb.fixDims = function(name) {return $.extend([], getTbl(name).fixDims);}; //Array of fixed dimensions in fetching data for a certain table.
@@ -490,8 +498,11 @@ function eurostatDb () {
                         //console.log(url);//DEBUG
                         try {
                             var records = parseDataXml(xml, tbl.fields); //might throw error
-                            if (records) {tbl.data.insert(records);
-                            fetchedData = fetchedData.concat(records);}
+                            if (records) {
+                                if (tbl.data(fieldFilter(filter)).count()) return; //records already obtained earlier (check again because of asynchronousity)
+                                tbl.data.insert(records);
+                                fetchedData = fetchedData.concat(records);
+                            }
                         } catch (e) {errCollect(e);}
                     })
                     .fail(function (xhr, textStatus, e) {errCollect(e);})
@@ -549,7 +560,7 @@ function eurostatDb () {
         xmlData = xmlData["GenericData"]["DataSet"]["Series"];//chop off uninteresting part
 
         [].concat(xmlData).forEach(function (d) { //turn into array if only 1 data set
-            //get all data that remains the same (=unit, country, product, indic_nrg, ...) in series
+            //get all data that remains the same (=unit, country, PRODUCT, indic_nrg, ...) in series
             var v_base = {};
             d["SeriesKey"]["Value"].forEach(function (skv) {
                 var key = skv["_id"];
@@ -611,18 +622,18 @@ function eurostatDb () {
     };
     function varDimFilter(tbl, fieldFilter){
         var varDimFilter = {};
-        tbl.varDims.forEach(function (varDim) {
-            var val = fieldFilter[varDim];
-            if (!val || $.isPlainObject(val)) varDimFilter[varDim] = ""; //dimension left out (val == undefined) or query object. Either case: must get data for all available values.
-            else varDimFilter[varDim] = val;
+        tbl.varDims.forEach(function (dim) {
+            var val = fieldFilter[dim];
+            if (!val || $.isPlainObject(val)) varDimFilter[dim] = ""; //dimension left out (val == undefined) or query object. Either case: must get data for all available values.
+            else varDimFilter[dim] = val;
         });
         return varDimFilter;
     } //Turn fieldFilter into varDimFilter, for use in .fetchData().
     function fieldFilter(varDimFilter){
         var fieldFilter = {};
-        Object.keys(varDimFilter).forEach(function(varDim){
-            var val = varDimFilter[varDim];
-            if (val !== "") fieldFilter[varDim] = val;
+        Object.keys(varDimFilter).forEach(function(dim){
+            var val = varDimFilter[dim];
+            if (val !== "") fieldFilter[dim] = val;
         });
         return fieldFilter;
     } //Turn varDimFilter into fieldFilter, for use in taffy().
@@ -662,6 +673,5 @@ function eurostatDb () {
     function tblIndex(name) {return tbls.map(function(tbl){return tbl.name;}).indexOf(name);}
 
     function pop(obj, key) {var value = {}; value[key] = obj[key]; delete obj[key]; return value;}
-
     return esDb;
 }
