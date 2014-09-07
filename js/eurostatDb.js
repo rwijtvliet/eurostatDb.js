@@ -58,6 +58,12 @@
  *      Arguments: dataflow name.
  *      Return: clone of array of dimension names.
  *
+ * .concepts()
+ *      Array of concepts for a certain dataflow.
+ *      Arguments: dataflow name.
+ *      Return: clone of array of concept names.
+ *
+ *
  * .codelistDict()
  *      Dictionary object with codes, and their description, that can be used/found for certain field.
  *      Arguments: (optional) dataflow name. If omitted: for all dataflows.
@@ -84,16 +90,6 @@
  *      Arguments: none.
  *      Return: array of dataflow names.
  *
- * .fields()
- *      Array of fields that are stored in a local table for a certain dataflow. These are used in getting data out of the table (see .getRst, below).
- *      Arguments: dataflow name.
- *      Return: clone of array of field names.
- *
- * .varDims()
- *      Array of variable dimensions for a certain dataflow. These are used in fetching data to store in the table (see .fetchData, below).
- *      Arguments: dataflow name.
- *      Return: clone of array of dimension names.
- *
  * .fixDims()
  *      Array of fixed dimensions for a certain dataflow. These are used in fetching data to store in the table (see .fetchData, below).
  *      Arguments: dataflow name.
@@ -103,6 +99,31 @@
  *      Object of the fixed dimensions, and the values they are fixed to.
  *      Arguments: dataflow name.
  *      Return: clone of object of (dimension name: value) pairs.
+ *
+ * .varDims()
+ *      Array of variable dimensions for a certain dataflow. These are used in fetching data to store in the table (see .fetchData, below).
+ *      Arguments: dataflow name.
+ *      Return: clone of array of dimension names.
+ *      
+ * .fields()
+ *      Array of fields that are stored in a local table for a certain dataflow. These are used in getting data out of the table (see .getRst, below).
+ *      Arguments: dataflow name.
+ *      Return: clone of array of field names.
+ *
+ * .fieldsInput()
+ *      Array of input fields that are stored in a local table for a certain dataflow. Specifying a single value for each uniquely specifies a record.
+ *      Arguments: dataflow name.
+ *      Return: clone of array of input field names.
+ *
+ * .fieldsOutput()
+ *      Array of output fields that are stored in a local table for a certain dataflow. The values for these specify the observation connected to the input field values.
+ *      Arguments: dataflow name.
+ *      Return: clone of array of input field names.
+ *
+ * .fields()
+ *      Array of fields that are stored in a local table for a certain dataflow. These are used in getting data out of the table (see .getRst, below).
+ *      Arguments: dataflow name.
+ *      Return: clone of array of field names.
  *
  * .fetchData()
  *      Fetch, through eurostat server API, certain data. (asynchronous)
@@ -204,7 +225,7 @@ function eurostatDb () {
         tbls = [];//Table objects (see above)
 
     esDb.dfNames = function () {return dfs.map(function(df){return df.name;});};
-    esDb.df = function (name) {return $.extend(true, {}, getDf(name));}; //immutable
+    esDb.df = function (name) {return $.extend({}, getDf(name));}; //immutable
     esDb.fetchDfs = function (filter, callback){
         //Get array of all dataflows that are available from API that comply to filter, and save to internal 'dfs' array.
         var url = "js/all_latest_ESTAT_references=none_detail=full.xml";
@@ -268,27 +289,27 @@ function eurostatDb () {
     }
 
     esDb.dsdNames = function () {return dsds.map(function(dsd){return dsd.name;});};
-    esDb.dsd = function (name) {return $.extend(true, {}, getDsd(name));}; //immutable.
+    esDb.dsd = function (name) {return $.extend({}, getDsd(name));}; //immutable.
     esDb.fetchDsd = function (name, callback) {
         //Get data flow definition from certain table and add to corresponding dsd array.
         var dsd = getDsd(name),
             url = "http://ec.europa.eu/eurostat/SDMX/diss-web/rest/datastructure/ESTAT/DSD_" + name;
 
         if (dsd) {//dsd already obtained earlier
-            if (typeof callback === "function") callback(null, $.extend(true, {}, dsd));
+            if (typeof callback === "function") callback(null, $.extend({}, dsd));
             return esDb;
         }
         $.get(url)
             .done(function (xml) {
                 dsd = getDsd(name);
                 if (dsd) {//dsd already obtained earlier (check again because of asynchronousity)
-                    if (typeof callback === "function") callback(null, $.extend(true, {}, dsd));
+                    if (typeof callback === "function") callback(null, $.extend({}, dsd));
                 }
                 dsd = parseDsdXml(xml);
                 dsd.name = name;
 
                 dsds.push(dsd);
-                if (typeof callback === "function") callback(null, $.extend(true, {}, dsd));
+                if (typeof callback === "function") callback(null, $.extend({}, dsd));
             })
             .fail(function (xhr, textStatus, error) {
                 if (typeof callback === "function") callback(new Error(error.toString()), undefined);
@@ -305,7 +326,7 @@ function eurostatDb () {
                 codelists: []
             },
             converter = new X2JS(),
-            renameCodelists = {"Observation flag.":"OBS_FLAG", "Observation status.":"OBS_VALUE"};
+            renameCodelists = {"Observation flag.":"OBS_FLAG", "Observation status.":"OBS_STATUS"};
 
         //Parse: dimensions.
         dsdXml = converter.xml2json(xml);
@@ -423,6 +444,8 @@ function eurostatDb () {
             fixDimFilter: {},
             varDims: [],
             fields: [],
+            fieldsInput: [],
+            fieldsOutput: [],
             dsd: dsd, //properties dimensions, concepts, codelists, and name (=redundant)
             data: TAFFY() //database itself
         };
@@ -446,24 +469,30 @@ function eurostatDb () {
             }
             if (period) period = "/?" + period;
         }
-
         tbl.fixDims.push("TIME_PERIOD");
         tbl.fixDimFilter["TIME_PERIOD"] = period;
 
         //Get table fields.
-        tbl.dsd.concepts.forEach(function(con) {if (!tbl.fixDimFilter.hasOwnProperty(con)) tbl.fields.push(con); });
+        tbl.dsd.concepts.forEach(function(con) {
+            if (tbl.fixDims.indexOf(con)===-1) {//exclude those that are fixed
+                tbl.fields.push(con);
+                if (tbl.varDims.indexOf(con)>-1 || con === "TIME" || con === "PERIOD") tbl.fieldsInput.push(con); else tbl.fieldsOutput.push(con);
+            }
+        });
 
         tbls.push(tbl);
 
-        if (typeof callback === "function") callback(null, $.extend(true,{},tbl));
+        if (typeof callback === "function") callback(null, $.extend({},tbl));
         return esDb;
     };
     esDb.tblNames = function (){return tbls.map(function(tbl){return tbl.name;});};
-    esDb.tbl = function(name) {var tbl = getTbl(name); if (!tbl) return undefined; else return $.extend(true, {}, tbl);}; //immutable
-    esDb.fields = function(name) {return $.extend([], getTbl(name).fields);}; //Array of fields that are stored in a certain table.
-    esDb.varDims = function(name) {return $.extend([], getTbl(name).varDims);}; //Array of variable dimensions in fetching data for a certain table.
+    esDb.tbl = function(name) {var tbl = getTbl(name); if (!tbl) return undefined; else return $.extend({}, tbl);}; //immutable
     esDb.fixDims = function(name) {return $.extend([], getTbl(name).fixDims);}; //Array of fixed dimensions in fetching data for a certain table.
     esDb.fixDimFilter = function(name) {return $.extend([], getTbl(name).fixDimFilter);}; //Object of fixed dimensions, and their values, for a certain table.
+    esDb.varDims = function(name) {return $.extend([], getTbl(name).varDims);}; //Array of variable dimensions in fetching data for a certain table.
+    esDb.fields = function(name) {return $.extend([], getTbl(name).fields);}; //Array of fields that are stored in a certain table.
+    esDb.fieldsInput = function(name) {return $.extend([], getTbl(name).fieldsInput);}; //Array of fields that are stored in a certain table, that uniquely specify a record.
+    esDb.fieldsOutput = function(name) {return $.extend([], getTbl(name).fieldsOutput);}; //Array of fields that are stored in a certain table, that specify the observation.
 
     esDb.fetchData = function (name, varDimFilters, callback) {
         var errors = "",
@@ -644,7 +673,7 @@ function eurostatDb () {
         // individual properties, so if there are 3 properties with 4-element arrays each, there will be 64 (4^3) objects
         // in the returned array.
         // E.g. in: {prop1:[1,2], prop2:['a','b']} --> out: [{prop1:1, prop2:'a'}, {prop1:1, prop2:'b'}, ...]
-        var obj = $.extend(true, {}, obj), //local copy to not affect input object.
+        var obj = $.extend({}, obj), //local copy to not affect input object.
             keys = Object.keys(obj);
 
         if (keys.length == 0) {
@@ -673,5 +702,20 @@ function eurostatDb () {
     function tblIndex(name) {return tbls.map(function(tbl){return tbl.name;}).indexOf(name);}
 
     function pop(obj, key) {var value = {}; value[key] = obj[key]; delete obj[key]; return value;}
+
+    /*function objectsEqual(obj1, obj2) {
+     if (!obj1 != !obj2) return false; //xor is true if either doesn't exist and other does
+     if (obj1) {
+     var keys1 = Object.keys(obj1),
+     keys2 = Object.keys(obj2);
+     if (keys1.length !== keys2.length) return false;
+     else {
+     keys1.forEach(function(k1) {if (obj1[k1] !== obj2[k1]) return false;});
+     keys2.forEach(function(k2) {if (obj1[k2] !== obj2[k2]) return false;});
+     }
+     }
+     return true;
+     }*/
+
     return esDb;
 }
