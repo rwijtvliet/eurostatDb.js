@@ -19,7 +19,3 @@ http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/DS-008573/M.003.27101250.VA
 
 returns error code="500", severity="Warning", "Cannot connect to NavTree service"
 
-
-problem 3
-
-What is meaning of TIME_PERIOD dimension?

@@ -16,7 +16,7 @@
             if (i>200) return;
             $("ul").append("<li class='" + dfName + " started'>" + dfName + " </li>");
             inflight++;
-            db.fetchDsd(dfName, function (error, dsd) {
+            db.qDsd(dfName, function (error, dsd) {
                 inflight--;
                 checkDsd(error, dsd, dfName, i);
                 checkAll(error, dsd);
