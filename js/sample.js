@@ -1,16 +1,14 @@
+db = eurostatDb();
 
-//In short:
+//v1:
 
 //Sample code 1:
-
-db = eurostatDb();
-db.tblQinit("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015});//1
-db.rstQ("demo_pjan", {SEX: "T", GEO: "NL"}) //2
-    .then(function(rst){
+db.tblQinit("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015}); //1
+db.rstQ("demo_pjan", {SEX: "T", GEO: "NL"}, "TIME ASEC") //2
+    .then(function (rst) {
         $("div#info").prepend("<h2>Total population in the Netherlands:</h2>");
         rst.forEach(function (r) {$("ul").append("<li>In " + r.TIME + ": " + r.OBS_VALUE + "</li>");});//3
-    })
-    .catch(function(error){alert(error)});
+    });
 //What's happening here?
 //1: specifies the name of the dataflow that I'm interested in, and fixes some of its dimensions and the time period. That way, I always fetch annual data and age aggregates, from the time period between 1995 and 2015.
 //2: fetches data for total population of Netherlands.
@@ -18,13 +16,7 @@ db.rstQ("demo_pjan", {SEX: "T", GEO: "NL"}) //2
 
 
 
-
-
-//sample code 2: no prior knowledge
-cb = function (error, data) { //callback to display information to console
-    if (error) console.error(error.message);
-    else console.log(JSON.stringify(data, null, 2));
-};
+//Sample code 2: no prior knowledge
 then = function (data) { //callback to display information to console
     console.log(JSON.stringify(data, null, 2));
 };
@@ -37,8 +29,6 @@ function step5 () {db.rstQ("DS-008573", {FREQ:"M", DECLARANT:["001", "003"], PRC
 
 
 //Sample code 3:
-//TODO: needs work (joins not satisfactorily solved)
-/*
 function sample3(){
     db.initTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015}, function () {//1
         db.fetchData("demo_pjan", {SEX: ["M", "F"], GEO:"NL"}, function() {
@@ -53,4 +43,4 @@ function sample3(){
             rst.forEach(function(r) {$("div#info").append("<p>In " + r.TIME + ": " + r.OBS_VALUE + "</p>");}); //4
         });
     });
-}*/
+}
