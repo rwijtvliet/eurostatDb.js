@@ -52,7 +52,7 @@
  *      Asynchronously fetch, through eurostat server API, certain data.
  *      Arguments: dataflow name.
  *                 varDimFilter object, or array of varDimFilter objects, describing which data should be fetched.
- *      Return: Q promise to recordset with data described by varDimFilter. Progress function available with cumulative recordset.
+ *      Return: Q promise to recordset with data described by varDimFilter. Progress function available with number of ajax fetches still 'in flight'. Only called for most recent fetch.
  *              Recordset is array of objects with (field:value) pairs.
  *
  * .rstQ()
@@ -60,7 +60,7 @@
  *      Arguments: dataflow name.
  *                 fieldFilter object (varDimFilter object also possible).
  *                 (optional) order string, e.g. "OBS_VALUE asec" or "TIME desc". If omitted: no ordering (faster).
- *      Return: Q promise to recordset with data described by fieldFilter. Progress function available with cumulative recordset.
+ *      Return: Q promise to recordset with data described by fieldFilter. Progress function available with number of ajax fetches still 'in flight'. Only called for most recent fetch.
  *
  * .rst()
  *      Synchronously get certain data from local database.
@@ -162,6 +162,7 @@
 
 function eurostatDb () {
     var esDb = {},
+        fetchIdCurrent = 0,
         dfsQ,      //Promise to array with Dataflow objects (see above)
         dsdQs = {},//Object with promises to Data Structure Definition objects (see above)
         tblQs = {},//Object with promises to Table objects (see above)
@@ -352,7 +353,7 @@ function eurostatDb () {
             esDb.dsdQ(name)
                 .then(function (dsd) {
                     //Save dsd to table.
-                        tbl.dsd = dsd;
+                    tbl.dsd = dsd;
 
                     //Dimensions: split into fixed and variable.
                     dsd.dimensions.forEach(function (dim) {
@@ -409,19 +410,20 @@ function eurostatDb () {
 
     function dataQ (tbl, varDimFilters) {
         var rst = [],
+            fetchId = ++fetchIdCurrent, //used to make sure only progress for last request is posted.
             inflight = 0; //count how many ajax requests we're still waiting for.
 
         return Q.Promise(function (resolve, reject, progress) {
 
             function checkFinished () {
                 if (!inflight) resolve(rst);
-                else if (typeof progress === 'function') progress(rst);
+                else if ((typeof progress === 'function') && (fetchId === fetchIdCurrent)) progress(inflight);
             }
 
             [].concat(varDimFilters).forEach(function (varDimFilter) {
                 //varDimFilter: single object with properties that are value arrays. singlevalFilters(varDimFilter): array of objects with properties that are single values.
                 singlevalFilters(varDimFilter).forEach(function (filter) {
-
+                    //var filter = varDimFilter;
                     //Add those, that are already fetched before, synchronously to rst.
                     var records = tbl.data(fieldFilter(filter)).get();
                     if (records.length) {
@@ -560,9 +562,7 @@ function eurostatDb () {
         //Get promise to recordset that is described with fieldFilter object. Asynchronous, fetch data first if necessary.
         if (!tblQs.hasOwnProperty(name)) throw Error("Table (or promise to table) '" + name + "' has not been found.");
         return Q.Promise(function (resolve, reject, progress) {
-            var resolveF = resolve;
-            if (order) resolveF = function () {resolve(esDb.rst(name, fieldFilter, order));}
-
+            var resolveF = function () {resolve(esDb.rst(name, fieldFilter, order));};
             //Fetch (missing) data, get recordset, and use in callback.
             tblQs[name]
                 .then(function (tbl) {return dataQ(tbl, varDimFilter(tbl.varDims, fieldFilter));})

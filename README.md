@@ -8,14 +8,14 @@ Eurostat provides a wealth of information -- it's just pretty hard to get to and
 ## I promise
 
 The code has been rewritten to use promises instead of callbacks, so that there are now 2 versions:
-* v0+: (deprecated) uses callbacks
-* v1+: uses promises
+* v0: (deprecated) uses callbacks
+* v1: uses promises
 
 There is no compatibility between the versions. The use of v1+ is encouraged.
 
 
 ## Sample use
-v1+
+v1 (current):
 ```js
 db = eurostatDb();
 db.tblQinit("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015}); //1
@@ -25,18 +25,6 @@ db.rstQ("demo_pjan", {SEX: "T", GEO: "NL"}, "TIME ASEC") //2
         rst.forEach(function (r) {$("ul").append("<li>In " + r.TIME + ": " + r.OBS_VALUE + "</li>");});//3
     })
     .catch(function (e) {alert(e);});
-```
-v0+ (deprecated):
-```js
-db = eurostatDb();
-db.initTable("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015}, function () {//1
-    db.fetchRst("demo_pjan", {SEX: "T", GEO:"NL"}, "TIME ASEC", function (error, rst) {//2
-
-        $("div#info").append("<h2>Total population in the Netherlands:</h2>");
-        if (error) {$("div#info").append("<p>Error: " + error.message + "</p>"); return;}
-        rst.forEach(function(r) {$("div#info").append("<p>In " + r.TIME + ": " + r.OBS_VALUE + "</p>");}); //3
-    });
-});
 ```
 Resulting web page, and other examples, are found in the [wiki pages](https://github.com/rwijtvliet/eurostatDb.js/wiki). Check it out!
 
