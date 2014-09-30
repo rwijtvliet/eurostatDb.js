@@ -52,22 +52,24 @@
  *      Asynchronously fetch, through eurostat server API, certain data.
  *      Arguments: dataflow name.
  *                 varDimFilter object, or array of varDimFilter objects, describing which data should be fetched.
- *      Return: Q promise to recordset with data described by varDimFilter. Progress function available with number of ajax fetches still 'in flight'. Only called for most recent fetch.
- *              Recordset is array of objects with (field:value) pairs.
+ *      Return: Q promise to recordset with those records that needed to be fetched in order to complete the data described by varDimFilter.
+ *                 Progress function available with number of ajax fetches still 'in flight', which is only called for most recent fetch.
+ *                 Recordset is array of objects with (field:value) pairs.
  *
  * .rstQ()
  *      Synchronously get certain data from local database, and asynchronously fetch, through eurostat sever API, any data that might be missing.
  *      Arguments: dataflow name.
  *                 fieldFilter object (varDimFilter object also possible).
  *                 (optional) order string, e.g. "OBS_VALUE asec" or "TIME desc". If omitted: no ordering (faster).
- *      Return: Q promise to recordset with data described by fieldFilter. Progress function available with number of ajax fetches still 'in flight'. Only called for most recent fetch.
+ *      Return: Q promise to recordset with data described by fieldFilter.
+ *                 Progress function available with number of ajax fetches still 'in flight', which is only called for most recent fetch.
  *
  * .rst()
  *      Synchronously get certain data from local database.
  *      Arguments: dataflow name.
  *                 fieldFilter object (varDimFilter object also possible).
  *                 (optional) order string, e.g. "OBS_VALUE asec" or "TIME desc". If omitted: ordered by ascending TIME field value.
- *      Return: Recordset.
+ *      Return: Recordset with data described by fieldFilter.
  *
  *
  *
@@ -163,6 +165,7 @@
 function eurostatDb () {
     var esDb = {},
         fetchIdCurrent = 0,
+        fetchRegister = {},//key = 'tblname|varDim1Val|varDim2Val|...';  value = 'undefined' before fetching; 'Promise' if being fetched; '1' after fetching.
         dfsQ,      //Promise to array with Dataflow objects (see above)
         dsdQs = {},//Object with promises to Data Structure Definition objects (see above)
         tblQs = {},//Object with promises to Table objects (see above)
@@ -408,60 +411,114 @@ function eurostatDb () {
     };
     esDb.tblQNames = function () {return Object.keys(tblQs);};
 
+    /*
     function dataQ (tbl, varDimFilters) {
-        var rst = [],
+        var fetchedData = [],
             fetchId = ++fetchIdCurrent, //used to make sure only progress for last request is posted.
             inflight = 0; //count how many ajax requests we're still waiting for.
 
         return Q.Promise(function (resolve, reject, progress) {
 
-            function checkFinished () {
-                if (!inflight) resolve(rst);
-                else if ((typeof progress === 'function') && (fetchId === fetchIdCurrent)) progress(inflight);
-            }
-
+            var filters = [];
             [].concat(varDimFilters).forEach(function (varDimFilter) {
                 //varDimFilter: single object with properties that are value arrays. singlevalFilters(varDimFilter): array of objects with properties that are single values.
                 singlevalFilters(varDimFilter).forEach(function (filter) {
-                    //var filter = varDimFilter;
-                    //Add those, that are already fetched before, synchronously to rst.
-                    var records = tbl.data(fieldFilter(filter)).get();
-                    if (records.length) {
-                        rst = rst.concat(records);
-                        return;
-                    }
-
-                    //Fetch and add those, that are not fetched before, asynchronously to rst.
-                    var url = dataUrl(tbl, filter);
-                    inflight++;
-                    $.get(url)
-                        .done(function (xml) {
-                            //console.log(url);//DEBUG
-                            try {
-                                var records = parseDataXml(xml, tbl.fields); //might throw error
-                                if (records) {
-                                    //At least add to rst...
-                                    rst = rst.concat(records);
-                                    //...but only add also to db if not present yet (added previously due to parallel asynch process)
-                                    if (!tbl.data(fieldFilter(filter)).count()) tbl.data.insert(records);
-                                }
-                            } catch (e) {
-                                reject(e);
-                            }
-                        })
-                        .fail(function (xhr, textStatus, error) {
-                            reject(Error(error.toString()));
-                        })
-                        .always(function () {
-                            inflight--;
-                            checkFinished();
-                        });
-
+                    filters.push(filter);
                 });
             });
-            checkFinished();
+
+            var promises = [];
+            filters.forEach(function (filter) {
+
+                //Don't refetch if data is already present in db.
+                if (tbl.data(fieldFilter(filter)).count()) return;
+
+                //Fetch and add those, that are not fetched before, asynchronously.
+                var url = dataUrl(tbl, filter);
+                inflight++;
+                promises.push(
+                    Q($.get(url))
+                        .then(function (xml) {
+                            console.log(url);//DEBUG
+                            var records = parseDataXml(xml, tbl.fields); //might throw error
+                            if (!records) return; //sometimes there might be no data in the requested rst
+                            if (tbl.data(fieldFilter(filter)).count()) return; //only add to db if not present yet (might be added previously due to parallel asynch process)
+                            fetchedData = fetchedData.concat(records);
+                            tbl.data.insert(records);
+                        })
+                        .catch(function (error) {
+                            reject(error);
+                        })
+                        .finally(function () {
+                            if ((typeof progress === 'function') && (fetchId === fetchIdCurrent)) progress(--inflight);
+                        })
+                );
+            });
+
+            Q.all(promises)
+                .then(function () {
+                    resolve(fetchedData);
+                })
+                .catch(function (e) {
+                    reject(e);//todo: simplify
+                });
+        });
+    }*/
+
+    function dataQ (tbl, varDimFilters) {
+        var fetchedData = [],
+            fetchId = ++fetchIdCurrent, //used to make sure only progress for latest request is posted.
+            inflight = 0; //count how many ajax requests we're still waiting for.
+
+        return Q.Promise(function (resolve, reject, progress) {
+
+            //e.g. varDimFilters                  = [{a:"1", b:["1", "2"]}, {a:"4", b:"5"}]
+            //     varDimFilter                   = {a:"1", b:["1", "2"]} (on first pass) or {a:"4", b:"5"} (on second pass)
+            //     singlevalFilters(varDimFilter) = {a:"1", b:"1"} or {a:"1", b:"2"} (first pass), or {a:"4", b:"5"} (second pass)
+            var filters = [];
+            [].concat(varDimFilters).forEach(function (varDimFilter) {
+                singlevalFilters(varDimFilter).forEach(function (filter) {
+                    filters.push(filter);
+                });
+            });
+
+            var promises = [];
+            filters.forEach(function (filter) {
+
+                var key = fetchKey(tbl, filter);
+
+                //Don't refetch if data is already present in db.
+                if (fetchRegister[key] === 1) return; //data has already been fetched before
+                if (fetchRegister[key]) {             //data is being fetched right now
+                    promises.push(fetchRegister[key]);
+                    return;
+                }
+
+                //data must be fetched
+                var url = dataUrl(tbl, filter);
+                inflight++;
+                fetchRegister[key] = Q($.get(url))
+                    .then(function (xml) {
+                        //console.log(url);//DEBUG
+                        var records = parseDataXml(xml, tbl.fields); //might throw error
+                        fetchRegister[key] = 1;//done, no need to fetch again
+                        if (!records) return; //sometimes there might be no data in the requested rst
+                        fetchedData = fetchedData.concat(records);
+                        tbl.data.insert(records);
+                    })
+                    .catch(reject)
+                    .finally(function () {
+                        if ((typeof progress === 'function') && (fetchId === fetchIdCurrent)) progress(--inflight);
+                    });
+                promises.push(fetchRegister[key]);
+            });
+
+            Q.all(promises)
+                .then(function () {resolve(fetchedData);})
+                .catch(reject);
         });
     }
+
     function dataUrl (tbl, varDimFilter) {
         //Returns URL to obtain dataset as defined in config object.
         var url = "http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/" + tbl.name + "/",
@@ -535,12 +592,10 @@ function eurostatDb () {
         return newData;
     }
     esDb.dataQ = function (name, varDimFilters) {
+        //Get promise to recordset that is fetched in order to complete the data described with varDimFilters object.
         if (!tblQs.hasOwnProperty(name)) throw Error("Table (or promise to table) '" + name + "' has not been found.");
-
-        return Q.Promise(function (resolve, reject, progress) {
-            tblQs[name]
-                .then(function (tbl) {return dataQ(tbl, varDimFilters);})
-                .then(resolve, reject, progress);
+        return tblQs[name].then(function (tbl) {
+            return dataQ(tbl, varDimFilters);
         });
     };
     function rst (tbl, fieldFilter, order) {
@@ -562,11 +617,10 @@ function eurostatDb () {
         //Get promise to recordset that is described with fieldFilter object. Asynchronous, fetch data first if necessary.
         if (!tblQs.hasOwnProperty(name)) throw Error("Table (or promise to table) '" + name + "' has not been found.");
         return Q.Promise(function (resolve, reject, progress) {
-            var resolveF = function () {resolve(esDb.rst(name, fieldFilter, order));};
             //Fetch (missing) data, get recordset, and use in callback.
             tblQs[name]
                 .then(function (tbl) {return dataQ(tbl, varDimFilter(tbl.varDims, fieldFilter));})
-                .then(resolveF, reject, progress);
+                .then(function () {resolve(esDb.rst(name, fieldFilter, order));}, reject, progress);
         });
     };
     function varDimFilter (varDims, fieldFilter) {
@@ -579,7 +633,7 @@ function eurostatDb () {
         });
         return varDimFilter;
     }
-    function fieldFilter(varDimFilter){
+    function fieldFilter (varDimFilter) {
         //Turn varDimFilter into fieldFilter, for use in taffy(). I.e.: remove empty values from varDimFilter.
         var fieldFilter = {};
         Object.keys(varDimFilter).forEach(function (dim) {
@@ -587,6 +641,16 @@ function eurostatDb () {
             if (val !== "") fieldFilter[dim] = val;
         });
         return fieldFilter;
+    }
+    function fetchKey (tbl, varDimFilter) {
+        var keyVals = [tbl.name]; //start with table name
+        tbl.varDims.forEach(function (dim) {
+            var val = varDimFilter[dim] || ""; //make "" if undefined
+            if (val instanceof Array && val.length === 1) val = val[0]; //1-string-element array also OK
+            if (typeof val !== 'string') throw Error("FetchKey must have 1 or less string values for each element in table's varDims array.");
+            keyVals.push(val);
+        });
+        return keyVals.join("|");
     }
 
     function allPropValCombinations (obj) {
