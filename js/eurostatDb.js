@@ -23,50 +23,52 @@
  *
  * .dfsQ()
  *      Asynchronously get dataflow objects (i.e., that describe what data are available from eurostat server).
- *      Arguments: (optional) filter word, or array with filter words, of which dataflow name or dataflow description must include >=1 to be saved. If omitted or "": all available on eurostat server.
+ *      Arguments: (optional) filter word, or array with filter words, of which dataflow id or dataflow name (en, de, fr) must include >=1 to be saved. If omitted or "": all available on eurostat server.
  *      Return: Q promise to array of df objects.
  *
  * .dsdQ()
  *      Asynchronously fetch, through eurostat server API, data structure definitions (DSDs), for certain dataflow.
- *      Arguments: dataflow name.
+ *      Arguments: dataflow id.
  *      Return: Q promise to dsd object.
  *
  * .tblQ()
  *      Get promise to table object that was created before (or is still being created) with tblQinit().
- *      Arguments: dataflow name.
+ *      Arguments: dataflow id.
  *      Return: Q promise to tbl object.
  *
  * .tblQinit()
  *      Asynchronously (re)initialise table in database to hold data.
- *      Arguments: dataflow name.
+ *      Arguments: dataflow id.
  *                 (optional) <<fixDimFilter object, see below>> describing which dimensions are fixed to which values.
  *                 (optional) <<timePeriod object, see below>> describing time period of which to retrieve data. Must contain at least one of the properties 'startYear' and 'endYear'.
  *      Return: Q promise to tbl object.
  *
- * .tblQNames()
- *      Array of dataflow names for which a table has been created (or is still being created) with tblQinit().
+ * .tblQIds()
+ *      Array of dataflow ids for which a table has been created (or is still being created) with tblQinit().
  *      Arguments: none.
- *      Return: string array of dataflow names.
+ *      Return: string array of dataflow ids.
  *
  * .dataQ()
  *      Asynchronously fetch, through eurostat server API, certain data.
- *      Arguments: dataflow name.
+ *      Arguments: dataflow id.
  *                 varDimFilter object, or array of varDimFilter objects, describing which data should be fetched.
+ *                 (optional) prLastOnly boolean value. States if progress callback is called only for most recent dataQ call (false) or for all dataQ calls (true). If omitted: false.
  *      Return: Q promise to recordset with those records that needed to be fetched in order to complete the data described by varDimFilter.
- *                 Progress function available with number of ajax fetches still 'in flight', which is only called for most recent fetch.
+ *                 Progress function available with number of ajax fetches still 'in flight'. See prLastOnly argument.
  *                 Recordset is array of objects with (field:value) pairs.
  *
  * .rstQ()
  *      Synchronously get certain data from local database, and asynchronously fetch, through eurostat sever API, any data that might be missing.
- *      Arguments: dataflow name.
+ *      Arguments: dataflow id.
  *                 fieldFilter object (varDimFilter object also possible).
- *                 (optional) order string, e.g. "OBS_VALUE asec" or "TIME desc". If omitted: no ordering (faster).
+ *                 (optional) order string, e.g. "OBS_VALUE asec" or "GEO asec, TIME desc". "asec" can be omitted. If omitted completely: no ordering (faster).
+ *                 (optional) prLastOnly boolean value. States if progress callback is called only for most recent dataQ call (false) or for all dataQ calls (true). If omitted: false.
  *      Return: Q promise to recordset with data described by fieldFilter.
- *                 Progress function available with number of ajax fetches still 'in flight', which is only called for most recent fetch.
+ *                 Progress function available with number of ajax fetches still 'in flight'. See prLastOnly argument.
  *
  * .rst()
  *      Synchronously get certain data from local database.
- *      Arguments: dataflow name.
+ *      Arguments: dataflow id.
  *                 fieldFilter object (varDimFilter object also possible).
  *                 (optional) order string, e.g. "OBS_VALUE asec" or "TIME desc". If omitted: ordered by ascending TIME field value.
  *      Return: Recordset with data described by fieldFilter.
@@ -76,39 +78,38 @@
  * DESCRIPTION OF OBJECTS CREATED (AND USED) BY EUROSTATDB
  *
  * dataflow (df) object {
- *      name: "dataflowname",
- *      descrs: ["descrEn", "descrDe", "descrFr"]
+ *      id: "dataflowId",
+ *      names: ["nameEn", "nameDe", "nameFr"]
  *  }
  *
  *
  * data structure definition (dsd) object {
- *      name: "dataflowname",
+ *      id: "dataflowId",
  *      concepts: ["field", ...],
  *      dimensions: ["field", ...],
  *      codelists: [
  *          {
- *              name: "codelistname",
- *              codes: [{name: "codename", descr:""}, ...]
+ *              fldName: "fieldname",
+ *              codes: [{id: "code", name:""}, ...]
  *          }, ...  ],
- *      codelist: function,  //see below
- *      codelistDict: function   //see below
+ *      codesArr: function,  //see below
+ *      codesDict: function   //see below
  *  }
  * where
- *      codelist()
- *          Code list for a certain field.
- *          Arguments: (optional) name of field(/concepts/dimension) of which the list of possible codes is wanted. If omitted: for all fieldnames.
- *          Return: if fieldname specified:  the codes array for the specified field.
- *                  if fieldname omitted:    the codelists array, so: for each field.
+ *      codesArr()
+ *          Code array for a certain field.
+ *          Arguments: name of field(/concepts/dimension) of which the list of possible codes is wanted.
+ *          Return: the codes array for the specified field.
  *
- *      codelistDict()
- *          Dictionary object with codes, and their description, that can be used/found for certain field.
+ *      codesDict()
+ *          Dictionary object with codes, and their names, that can be used/found for certain field.
  *          Arguments: (optional) name of field(/concept/dimension) of which the list of possible codes is wanted. If omitted: for all fieldnames.
- *          Return: if fieldname specified:  object with {name: description}, for each code in the field's codelist.
- *                  if fieldname omitted:    object with {fieldname: {name: description}}, for each fieldname in the codelist-array.
+ *          Return: if fieldname specified:  object with {id: name}, for each code in the field's codes array.
+ *                  if fieldname omitted:    object with {fieldName: {id: name}}, for each fieldname in the codelist-array.
  *
  *
  * table (tbl) object {
- *      name: "dataflowname",
+ *      id: "dataflowId",
  *      dsd: <<dsd object, see above>>,
  *      fixDims: ["field", ...],        //fields of which value was specified during table initialisation.
  *      fixDimFilter: {field1:"value1", field2:"value2", ...}, //Object of the fixed dimensions, and the values they are fixed to. See tblDef object, below.
@@ -160,12 +161,11 @@
 
 
 //TODO: count expected return size, check if exceeds limit of 1 000 000
-//TODO: find out how the informational flag (OBS_FLAG="i") is represented in metadata --> answer: not necessary; "i" is deprecated.
 
 function eurostatDb () {
     var esDb = {},
         fetchIdCurrent = 0,
-        fetchRegister = {},//key = 'tblname|varDim1Val|varDim2Val|...';  value = 'undefined' before fetching; 'Promise' if being fetched; '1' after fetching.
+        fetchRegister = {},//key = 'tblId|varDim1Val|varDim2Val|...';  value = 'undefined' before fetching; 'Promise' if being fetched; '1' after fetching.
         dfsQ,      //Promise to array with Dataflow objects (see above)
         dsdQs = {},//Object with promises to Data Structure Definition objects (see above)
         tblQs = {},//Object with promises to Table objects (see above)
@@ -197,16 +197,16 @@ function eurostatDb () {
         dfsXml = converter.xml2json(xml);
         dfsXml["Structure"]["Structures"]["Dataflows"]["Dataflow"].forEach(function (d) {
             var df = {
-                    name: d["_id"],
-                    descrs: []
+                    id: d["_id"],
+                    names: []
                 },
                 add = true;
 
             d["Name"].forEach(function (n) {
                 switch(n["_xml:lang"]) {
-                    case "en": df.descrs[0] =  n["__text"]; break;
-                    case "de": df.descrs[1] =  n["__text"]; break;
-                    case "fr": df.descrs[2] =  n["__text"]; break;
+                    case "en": df.names[0] =  n["__text"]; break;
+                    case "de": df.names[1] =  n["__text"]; break;
+                    case "fr": df.names[2] =  n["__text"]; break;
                 }
             });
 
@@ -215,9 +215,9 @@ function eurostatDb () {
                 add = false;
                 [].concat(filter).forEach(function (filterTerm) {
                     if (add) return;
-                    if (df.name.toLowerCase().indexOf(filterTerm.toLowerCase()) > -1) add = true;
-                    df.descrs.forEach(function (descr) {
-                        if (descr.toLowerCase().indexOf(filterTerm.toLowerCase()) > -1) add = true;
+                    if (df.id.toLowerCase().indexOf(filterTerm.toLowerCase()) > -1) add = true;
+                    df.names.forEach(function (name) {
+                        if (name.toLowerCase().indexOf(filterTerm.toLowerCase()) > -1) add = true;
                     });
                 });
             }
@@ -228,20 +228,20 @@ function eurostatDb () {
         return dfs;
     }
 
-    //esDb.dsdQnames = function () {return Object.keys(dsdQs);};
-    esDb.dsdQ = function (name) {
+    //esDb.dsdQIds = function () {return Object.keys(dsdQs);};
+    esDb.dsdQ = function (id) {
         //Get (promise to) data flow definition from certain table and add to dsd promise array.
-        if (dsdQs.hasOwnProperty(name)) return dsdQs[name];
+        if (dsdQs.hasOwnProperty(id)) return dsdQs[id];
 
-        var url = "http://ec.europa.eu/eurostat/SDMX/diss-web/rest/datastructure/ESTAT/DSD_" + name;
+        var url = "http://ec.europa.eu/eurostat/SDMX/diss-web/rest/datastructure/ESTAT/DSD_" + id;
 
-        dsdQs[name] = Q.Promise(function (resolve, reject) {
+        dsdQs[id] = Q.Promise(function (resolve, reject) {
             $.get(url)
                 .done(function (xml) {
                     var dsd = parseDsdXml(xml);
-                    dsd.name = name;
-                    dsd.codelist = codelist;
-                    dsd.codelistDict = codelistDict;
+                    dsd.id = id;
+                    dsd.codesArr = codesArr;
+                    dsd.codesDict = codesDict;
                     resolve(dsd);
                 })
                 .fail(function (xhr, textStatus, error) {
@@ -249,21 +249,21 @@ function eurostatDb () {
                 });
         });
 
-        return dsdQs[name];
+        return dsdQs[id];
     };
     function parseDsdXml (xml) {
         //Parse xml data describing data flow definition of certain dataflow.
         var dsdXml,//data structure definition data in xml file
             dsd = {
-                //name, //added later
+                //id, //added later
                 dimensions: [],
                 concepts: [],
                 codelists: []
-                //codelist, //added later
-                //codelistDict //added later
+                //codesArr, //added later
+                //codesDict //added later
             },
             converter = new X2JS(),
-            renameCodelists = {"Observation flag.": "OBS_FLAG", "Observation status.": "OBS_STATUS"};
+            renameFldNames = {"Observation flag.": "OBS_FLAG", "Observation status.": "OBS_STATUS"};
 
         //Parse: dimensions.
         dsdXml = converter.xml2json(xml);
@@ -287,14 +287,14 @@ function eurostatDb () {
             var codes = [];
             [].concat(clist["Code"]).forEach(function (code) {
                 codes.push({
-                    name: code["_id"],
-                    descr: code["Name"]["__text"]
+                    id: code["_id"],
+                    name: code["Name"]["__text"]
                 });
             });
-            var name = clist["Name"]["__text"];
-            if (renameCodelists.hasOwnProperty(name)) name = renameCodelists[name];//rename 2 codes (flag and status) that do not make sense.
+            var fldName = clist["Name"]["__text"];
+            if (renameFldNames.hasOwnProperty(fldName)) fldName = renameFldNames[fldName];//rename 2 fieldnames (flag and status) that do not make sense.
             dsd.codelists.push({
-                name: name,
+                fldName: fldName,
                 codes: codes
             });
         });
@@ -302,30 +302,28 @@ function eurostatDb () {
         return dsd;
     }
 
-    function codelist (fldName) {
-        if (!fldName) return this.codelists;
-        else {
-            var codelist = $.grep(this.codelists, function (codelist) {return codelist.name === fldName;});
-            if (!codelist.length) throw Error("Fieldname " + fldName + " not found");
-            return codelist[0].codes;
-        }
+    function codesArr (fldName) {
+        if (!fldName) throw Error("No fieldname specified");
+        var codelist = this.codelists.filter(function (codelist) {return codelist.fldName === fldName;});
+        if (!codelist.length) throw Error("Fieldname " + fldName + " not found");
+        return codelist[0].codes;
     }
-    function codelistDict (fldName) {
+    function codesDict (fldName) {
         var dict = {};
         if (!fldName) {
-            var fldNames = this.codelists.map(function (codelist) {return codelist.name;});
-            fldNames.forEach(function (fldName) {dict[fldName] = codelistDict(fldName)});
+            var fldNames = this.codelists.map(function (codelist) {return codelist.fldName;});
+            fldNames.forEach(function (fldName) {dict[fldName] = codesDict(fldName)});
         } else {
-            var codelist = $.grep(this.codelists, function (codelist) {return codelist.name === fldName;});
+            var codelist = this.codelists.filter(function (codelist) {return codelist.fldName === fldName;});
             if (!codelist.length) throw Error("Fieldname " + fldName + " not found");
-            codelist[0].codes.forEach(function (code) {dict[code.name] = code.descr;});
+            codelist[0].codes.forEach(function (code) {dict[code.id] = code.name;});
         }
         return dict;
     }
 
-    esDb.tbl = function (name) {if (tbls.hasOwnProperty(name)) return tbls[name]; else return undefined;};
-    esDb.tblQ = function (name) {if (tblQs.hasOwnProperty(name)) return tblQs[name]; else return undefined;};
-    esDb.tblQinit = function (name, fixDimFilter, timePeriod) {
+    esDb.tbl = function (id) {if (tbls.hasOwnProperty(id)) return tbls[id]; else return undefined;};
+    esDb.tblQ = function (id) {if (tblQs.hasOwnProperty(id)) return tblQs[id]; else return undefined;};
+    esDb.tblQinit = function (id, fixDimFilter, timePeriod) {
         //Get arguments straight.
         var n = arguments.length;
         if (n === 2 && (arguments[1].hasOwnProperty("startYear") || arguments[1].hasOwnProperty("endYear"))) {
@@ -337,23 +335,23 @@ function eurostatDb () {
         if (timePeriod && !Object.keys(timePeriod).length) timePeriod = undefined; //empty object --> undefined
 
         //Overwrite this tblQ if already exists
-        tblQs[name] = Q.Promise(function (resolve, reject) {
+        tblQs[id] = Q.Promise(function (resolve, reject) {
 
             //Make table.
             var tbl = {
-                name: name,
+                id: id,
                 fixDims: [],
                 fixDimFilter: {},
                 varDims: [],
                 fields: [],
                 fieldsInput: [],
                 fieldsOutput: [],
-                //dsd, //properties dimensions, concepts, codelists, and name //added later
+                //dsd, //properties dimensions, concepts, codelists, etc. //added later
                 data: TAFFY() //database itself
             };
 
             //Do when (promise to) dsd is resolved.
-            esDb.dsdQ(name)
+            esDb.dsdQ(id)
                 .then(function (dsd) {
                     //Save dsd to table.
                     tbl.dsd = dsd;
@@ -390,85 +388,55 @@ function eurostatDb () {
 
                     //Get codelist for TIME: 1: get 'test record set'.
                     var varDimFilter = {};
-                    tbl.varDims.forEach(function (dim) {varDimFilter[dim] = tbl.dsd.codelist(dim)[0].name;});
+                    tbl.varDims.forEach(function (dim) {varDimFilter[dim] = tbl.dsd.codesArr(dim)[0].id;});
                     return dataQ(tbl, varDimFilter);
                 })
                 .then(function (rst) {
                     //Get codelist for TIME: 2: add codelist.
                     var times = [];
                     rst.forEach(function (row) {if (times.indexOf(row.TIME) === -1) times.push(row.TIME);});
-                    var codes = times.map(function (time) {return {name: time, descr: time};});
-                    tbl.dsd.codelists.push({name: "TIME", codes: codes});
+                    var codes = times.map(function (time) {return {id: time, name: time};});
+                    tbl.dsd.codelists.push({fldName: "TIME", codes: codes});
 
                     //Save & resolve.
-                    tbls[name] = tbl;
+                    tbls[id] = tbl;
                     resolve(tbl);
                 })
                 .catch(function (e) {reject(e);});
         });
 
-        return tblQs[name];
+        return tblQs[id];
     };
-    esDb.tblQNames = function () {return Object.keys(tblQs);};
+    esDb.tblQIds = function () {return Object.keys(tblQs);};
 
-    /*
-    function dataQ (tbl, varDimFilters) {
-        var fetchedData = [],
-            fetchId = ++fetchIdCurrent, //used to make sure only progress for last request is posted.
-            inflight = 0; //count how many ajax requests we're still waiting for.
-
-        return Q.Promise(function (resolve, reject, progress) {
-
-            var filters = [];
-            [].concat(varDimFilters).forEach(function (varDimFilter) {
-                //varDimFilter: single object with properties that are value arrays. singlevalFilters(varDimFilter): array of objects with properties that are single values.
-                singlevalFilters(varDimFilter).forEach(function (filter) {
-                    filters.push(filter);
-                });
-            });
-
-            var promises = [];
-            filters.forEach(function (filter) {
-
-                //Don't refetch if data is already present in db.
-                if (tbl.data(fieldFilter(filter)).count()) return;
-
-                //Fetch and add those, that are not fetched before, asynchronously.
-                var url = dataUrl(tbl, filter);
-                inflight++;
-                promises.push(
-                    Q($.get(url))
-                        .then(function (xml) {
-                            console.log(url);//DEBUG
-                            var records = parseDataXml(xml, tbl.fields); //might throw error
-                            if (!records) return; //sometimes there might be no data in the requested rst
-                            if (tbl.data(fieldFilter(filter)).count()) return; //only add to db if not present yet (might be added previously due to parallel asynch process)
-                            fetchedData = fetchedData.concat(records);
-                            tbl.data.insert(records);
-                        })
-                        .catch(function (error) {
-                            reject(error);
-                        })
-                        .finally(function () {
-                            if ((typeof progress === 'function') && (fetchId === fetchIdCurrent)) progress(--inflight);
-                        })
-                );
-            });
-
-            Q.all(promises)
-                .then(function () {
-                    resolve(fetchedData);
-                })
-                .catch(function (e) {
-                    reject(e);//todo: simplify
-                });
+    esDb.dataQ = function (id, varDimFilters, prLastOnly) {
+        //Get promise to recordset that is fetched in order to complete the data described with varDimFilters object.
+        if (!tblQs.hasOwnProperty(id)) throw Error("Table (or promise to table) '" + id + "' has not been found.");
+        return tblQs[id].then(function (tbl) {
+            return dataQ(tbl, varDimFilters, prLastOnly);
         });
-    }*/
-
-    function dataQ (tbl, varDimFilters) {
+    };
+    esDb.rstQ = function (id, fieldFilter, order, prLastOnly) {
+        if (prLastOnly===undefined && (order===true || order===false)) {prLastOnly = order; order = undefined;}
+        //Get promise to recordset that is described with fieldFilter object. Asynchronous, fetch data first if necessary.
+        if (!tblQs.hasOwnProperty(id)) throw Error("Table (or promise to table) '" + id + "' has not been found.");
+        return Q.Promise(function (resolve, reject, progress) {
+            //Fetch (missing) data, get recordset, and use in callback.
+            tblQs[id]
+                .then(function (tbl) {return dataQ(tbl, varDimFilter(tbl.varDims, fieldFilter), prLastOnly);})
+                .then(function () {resolve(esDb.rst(id, fieldFilter, order));}, reject, progress);
+        });
+    };
+    esDb.rst = function (id, fieldFilter, order) {
+        //Get recordset that is described with fieldFilter object. Synchronous, searches in existing db.
+        if (!tbls.hasOwnProperty(id)) throw Error("Table '" + id + "' has not been found.");
+        return rst(tbls[id], fieldFilter, order);
+    };
+    function dataQ (tbl, varDimFilters, prLastOnly) {
         var fetchedData = [],
             fetchId = ++fetchIdCurrent, //used to make sure only progress for latest request is posted.
             inflight = 0; //count how many ajax requests we're still waiting for.
+        prLastOnly = prLastOnly || false; //default value is false
 
         return Q.Promise(function (resolve, reject, progress) {
 
@@ -501,14 +469,18 @@ function eurostatDb () {
                     .then(function (xml) {
                         //console.log(url);//DEBUG
                         var records = parseDataXml(xml, tbl.fields); //might throw error
+                        if (records) {//sometimes there might be no data in the requested rst
+                            fetchedData = fetchedData.concat(records);
+                            tbl.data.insert(records);
+                        }
                         fetchRegister[key] = 1;//done, no need to fetch again
-                        if (!records) return; //sometimes there might be no data in the requested rst
-                        fetchedData = fetchedData.concat(records);
-                        tbl.data.insert(records);
                     })
-                    .catch(reject)
+                    .catch(function (e) {
+                        fetchRegister[key] = undefined;
+                        reject(e);
+                    })
                     .finally(function () {
-                        if ((typeof progress === 'function') && (fetchId === fetchIdCurrent)) progress(--inflight);
+                        if ((typeof progress === 'function') && (!prLastOnly || fetchId === fetchIdCurrent)) progress(--inflight);
                     });
                 promises.push(fetchRegister[key]);
             });
@@ -518,10 +490,9 @@ function eurostatDb () {
                 .catch(reject);
         });
     }
-
     function dataUrl (tbl, varDimFilter) {
         //Returns URL to obtain dataset as defined in config object.
-        var url = "http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/" + tbl.name + "/",
+        var url = "http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/" + tbl.id + "/",
             dimVals = [],
             dimString;
 
@@ -591,38 +562,18 @@ function eurostatDb () {
         });
         return newData;
     }
-    esDb.dataQ = function (name, varDimFilters) {
-        //Get promise to recordset that is fetched in order to complete the data described with varDimFilters object.
-        if (!tblQs.hasOwnProperty(name)) throw Error("Table (or promise to table) '" + name + "' has not been found.");
-        return tblQs[name].then(function (tbl) {
-            return dataQ(tbl, varDimFilters);
-        });
-    };
     function rst (tbl, fieldFilter, order) {
         //Get recordset that is described with fieldFilter object. Synchronous, searches in existing db.
-        order = order || "TIME asec";//default
         fieldFilter = $.extend(true, {}, fieldFilter); //local copy
         Object.keys(fieldFilter).forEach(function (fld) {
             if (tbl.fields.indexOf(fld) === -1) throw Error("Unknown fieldname '" + fld + "' present in filter.");
             if (fieldFilter[fld] === "") delete fieldFilter[fld];
         });
+        if (!order) return tbl.data(fieldFilter).get();
+        order = order.replace(/ASEC/gi, "asec").replace(/ASC/gi, "asec").replace(/DESC/ig, "desc");
         return tbl.data(fieldFilter).order(order).get();
     }
-    esDb.rst = function (name, fieldFilter, order) {
-        //Get recordset that is described with fieldFilter object. Synchronous, searches in existing db.
-        if (!tbls.hasOwnProperty(name)) throw Error("Table '" + name + "' has not been found.");
-        return rst(tbls[name], fieldFilter, order);
-    };
-    esDb.rstQ = function (name, fieldFilter, order) {
-        //Get promise to recordset that is described with fieldFilter object. Asynchronous, fetch data first if necessary.
-        if (!tblQs.hasOwnProperty(name)) throw Error("Table (or promise to table) '" + name + "' has not been found.");
-        return Q.Promise(function (resolve, reject, progress) {
-            //Fetch (missing) data, get recordset, and use in callback.
-            tblQs[name]
-                .then(function (tbl) {return dataQ(tbl, varDimFilter(tbl.varDims, fieldFilter));})
-                .then(function () {resolve(esDb.rst(name, fieldFilter, order));}, reject, progress);
-        });
-    };
+
     function varDimFilter (varDims, fieldFilter) {
         //Turn fieldFilter into varDimFilter, for use in .dataQ().
         var varDimFilter = {};
@@ -633,17 +584,8 @@ function eurostatDb () {
         });
         return varDimFilter;
     }
-    function fieldFilter (varDimFilter) {
-        //Turn varDimFilter into fieldFilter, for use in taffy(). I.e.: remove empty values from varDimFilter.
-        var fieldFilter = {};
-        Object.keys(varDimFilter).forEach(function (dim) {
-            var val = varDimFilter[dim];
-            if (val !== "") fieldFilter[dim] = val;
-        });
-        return fieldFilter;
-    }
     function fetchKey (tbl, varDimFilter) {
-        var keyVals = [tbl.name]; //start with table name
+        var keyVals = [tbl.id]; //start with table id
         tbl.varDims.forEach(function (dim) {
             var val = varDimFilter[dim] || ""; //make "" if undefined
             if (val instanceof Array && val.length === 1) val = val[0]; //1-string-element array also OK
