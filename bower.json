@@ -21,8 +21,10 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "dev",
     "test",
-    "tests"
+    "tests",
+    "test*.html"
   ],
   "dependencies": {
     "taffydb": "*",
