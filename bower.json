@@ -1,0 +1,33 @@
+{
+  "name": "eurostatDb",
+  "version": "1.1",
+  "homepage": "https://github.com/rwijtvliet/eurostatDb.js",
+  "authors": [
+    "Ruud Wijtvliet <rwijtvliet@gmail.com>"
+  ],
+  "description": "fetch and store data from eurostat",
+  "main": "js/eurostatDb.js",
+  "keywords": [
+    "data",
+    "rest",
+    "eurostat",
+    "european",
+    "stat",
+    "statistics",
+    "promise"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "taffydb": "*",
+    "jquery": "~2.1.1",
+    "x2js": "*",
+    "q": "1.*"
+  }
+}
