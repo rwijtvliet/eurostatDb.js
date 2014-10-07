@@ -4,43 +4,40 @@
         dfError = [],
         inflight = 0,
         db = eurostatDb();
-    db.fetchDfs("", function() {
-        var dfNames = db.dfNames();
+    db.dfsQ("").then(function (dfs) {
+        var dfIds = dfs.map(function (df) {return df.id;});
 
-        dfNames.forEach(function (dfName, i) {
-            if (i>1) return;
-            $("ul").append("<li class='" + dfName + " started'>" + dfName + " </li>");
+        dfIds.forEach(function (dfId, i) {
+            if (i<90 || i>100) return;
+            $("ul").append("<li class='" + dfId + " started'>" + dfId + " </li>");
             inflight++;
-            db.initTable(dfName, {startYear: 2000, endYear: 2010}, function (error, tbl) {
-                getSomeData(error, tbl, dfName);
-            });
+            db.tblQinit(dfId, {startYear: 2000, endYear: 2010})
+                .then(function (tbl) {getSomeData(tbl, dfId);}, function (error) {addError(error, dfId);});
         });
     });
-
-    function getSomeData(error, tbl, dfName) {
-        if (error) {
-            dfError.push(dfName);
-            $("#ERRORS").append("<p>" + dfName + " :   " + error.toString() + "</p>");
-            $("#ERRORNAMES").text(JSON.stringify(dfError));
-            $("li." + dfName).removeClass("started").addClass("error");
-            return;
-        }
+    function addError(error, dfId) {
+        dfError.push(dfId);
+        $("#ERRORS").append("<p>" + dfId + " :   " + error.toString() + "</p>");
+        $("#ERRORNAMES").text(JSON.stringify(dfError));
+        $("li." + dfId).removeClass("started").addClass("error");
+    }
+    function getSomeData(tbl, dfId) {
         tryAgain(tbl, 10, function(error, data) {
             if (error) {
-                dfNotOk.push(tbl.name);
-                $("#NOTOK").append("<p>" + tbl.name + " :   " + error.toString() + "</p>");
+                dfNotOk.push(dfId);
+                $("#NOTOK").append("<p>" + dfId + " :   " + error.toString() + "</p>");
                 $("#NOTOKNAMES").text(dfNotOk.length + ":\n\n" + JSON.stringify(dfNotOk));
-                $("li." + dfName).removeClass("started").addClass("notok");
+                $("li." + dfId).removeClass("started").addClass("notok");
             } else if (!(data instanceof Array)) {
-                dfNotOk.push(tbl.name);
-                $("#NOTOK").append("<p>" + tbl.name + " :   dimensions: " + JSON.stringify(tbl.dsd.dimensions) + "</p>");
+                dfNotOk.push(dfId);
+                $("#NOTOK").append("<p>" + dfId + " :   dimensions: " + JSON.stringify(tbl.dsd.dimensions) + "</p>");
                 $("#NOTOKNAMES").text(dfNotOk.length + ":\n\n" + JSON.stringify(dfNotOk));
-                $("li." + dfName).removeClass("started").addClass("notok");
+                $("li." + dfId).removeClass("started").addClass("notok");
             } else {
-                dfOk.push(tbl.name);
-                $("#OK").append("<p>" + tbl.name + " : " + JSON.stringify(data[0]) + "</p>");
+                dfOk.push(dfId);
+                $("#OK").append("<p>" + dfId + " : " + JSON.stringify(data[0]) + "</p>");
                 $("#OKNAMES").text(dfOk.length + ":\n\n" + JSON.stringify(dfOk));
-                $("li." + dfName).removeClass("started").addClass("ok");
+                $("li." + dfId).removeClass("started").addClass("ok");
             }
 
             inflight--;
@@ -54,7 +51,7 @@
         var varDimFilter = {};
         tbl.varDims.forEach(function(varDim){
             var val = [""];
-            var codes = Object.keys(db.codelistDict(tbl.name, varDim));
+            var codes = Object.keys(tbl.dsd.codesDict(varDim));
             if (varDim === "PARTNER" || (varDim.indexOf("DECL") > -1) || (varDim.indexOf("INDICATOR") > -1)) val = ""; //all
             else if (varDim === "FREQ") val = codes;
             else val = codes[Math.floor(Math.random()*codes.length)]; //random
@@ -63,18 +60,19 @@
         return varDimFilter;
     }
 
-    function tryAgain(tbl, cnt, callback, vdf) {
+    function tryAgain(tbl, cnt, callback) {
         if (cnt<=0) {callback(Error("too many tries, last filter: " + JSON.stringify(vdf))); return;}
 
         var vdf = varDimFilter(tbl);
-        console.log (JSON.stringify(vdf));
+        console.log (tbl.id + " " + JSON.stringify(vdf));
         (function(cnt, vdf) {
             cnt--;
-            db.fetchData(tbl.name, vdf, function (error, rst) {
-                if (error) callback(error);
-                else if (rst) callback(null, rst);
-                else tryAgain(tbl, cnt, callback, vdf);
-            });
+            db.dataQ(tbl.id, vdf)
+                .then(function (rst) {
+                    if (!rst || !rst.length) tryAgain(tbl, cnt, callback);
+                    else callback(null, rst);
+                },
+                function (error) {callback(error);});
         }(cnt, vdf));
     }
 }());

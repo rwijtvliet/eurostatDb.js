@@ -4,11 +4,11 @@ db = eurostatDb();
 
 //Sample code 1:
 db.tblQinit("demo_pjan", {FREQ: "A", AGE: "TOTAL"}, {startYear: 1995, endYear: 2015}); //1
-db.rstQ("demo_pjan", {SEX: "T", GEO: ["NL", "DE", "BE"]}, "TIME ASEC") //2
+db.rstQ("demo_pjan", {SEX: "T", GEO: "NL"}, "TIME asec") //2
     .then(function (rst) {
         $("div#info").prepend("<h2>Total population in the Netherlands:</h2>");
         rst.forEach(function (r) {$("ul").append("<li>In " + r.TIME + ": " + r.OBS_VALUE + "</li>");});//3
-    },undefined,function(val){console.log("inflight" + val);});
+    }, undefined, function (val) {console.log("inflight: " + val);});
 //What's happening here?
 //1: specifies the name of the dataflow that I'm interested in, and fixes some of its dimensions and the time period. That way, I always fetch annual data and age aggregates, from the time period between 1995 and 2015.
 //2: fetches data for total population of Netherlands.
@@ -17,7 +17,7 @@ db.rstQ("demo_pjan", {SEX: "T", GEO: ["NL", "DE", "BE"]}, "TIME ASEC") //2
 
 
 //Sample code 2: no prior knowledge
-then = function (data) { //callback to display information to console
+var then = function (data) { //callback to display information to console
     console.log(JSON.stringify(data, null, 2));
 };
 function step1 () {db.dfsQ("monthly").then(then);}
@@ -51,25 +51,13 @@ function sample3 () {
 db.tblQinit("nrg_100a", {FREQ: "A", UNIT: "TJ"}); //leaves GEO and PRODUCT and TIME and INDIC_NRG
 function sample4() {
     db.dataQ("nrg_100a", {PRODUCT: ["0000", "2000"], INDIC_NRG: "B_100900", GEO: ["DE", "LU", "BE"]})
-        .then(function (rst) {
-            console.log("additionally: " + JSON.stringify(rst));
-        },
-        function (e) {
-            console.log("error: " + e.message);
-        },
-        function (f) {
-            console.log("inflight: " + f);
-        }
+        .then(function (rst) {console.log("additionally fetched:   " + JSON.stringify(rst));},
+        function (e) {console.log("error:   " + e.message);},
+        function (f) {console.log("inflight:   " + f);}
     );
     db.dataQ("nrg_100a", {PRODUCT: ["0000", "2000"], INDIC_NRG: "B_100900", GEO: ["DE", "LU", "BE", "NL"]})
-        .then(function (rst) {
-            console.log("additionally2: " + JSON.stringify(rst));
-        },
-        function (e) {
-            console.log("error2: " + e.message);
-        },
-        function (f) {
-            console.log("inflight2: " + f);
-        }
+        .then(function (rst) {console.log("additionally fetched 2: " + JSON.stringify(rst));},
+        function (e) {console.log("error 2: " + e.message);},
+        function (f) {console.log("inflight 2: " + f);}
     );
 }

@@ -8,49 +8,55 @@
         dimsOnly = [],
         intersects = [],
         db = eurostatDb();
-    db.fetchDfs("", function () {
-        var dfNames = db.dfNames(),
-            inflight = 0;
+    db.dfsQ("")
+        .then(function (dfs) {
+            var dfIds = dfs.map(function (df) {return df.id;}),
+                inflight = 0;
 
-        dfNames.forEach(function (dfName, i) {
+        dfIds.forEach(function (dfId, i) {
             if (i>200) return;
-            $("ul").append("<li class='" + dfName + " started'>" + dfName + " </li>");
+            $("ul").append("<li class='" + dfId + " started'>" + dfId + " </li>");
             inflight++;
-            db.qDsd(dfName, function (error, dsd) {
-                inflight--;
-                checkDsd(error, dsd, dfName, i);
-                checkAll(error, dsd);
-                if (!inflight) {
-                    checkAll_final(dfNames, dfError);
-                    alert("FINISHED!");
-                }
-            });
+            db.dsdQ(dfId)
+                .then(function (dsd) {
+                    inflight--;
+                    checkDsd(undefined, dsd, dfId, i);
+                    checkAll(undefined, dsd);
+                    if (!inflight) {
+                        checkAll_final(dfIds, dfError);
+                        alert("FINISHED!");
+                    }
+                })
+                .catch (function (error) {
+                    checkDsd(error, undefined, dfId, i);
+                    checkAll(error, undefined);
+                });
         });
     });
 
-    function checkDsd(error, dsd, dfName) {
+    function checkDsd(error, dsd, dfId) {
         if (error) {
-            dfError.push({name: dfName, error: error.toString()});
+            dfError.push({id: dfId, error: error.toString()});
             $("#Error").text(JSON.stringify(dfError));
-            $("li." + dfName).removeClass("started").addClass("error");
+            $("li." + dfId).removeClass("started").addClass("error");
             return;
         }
         var count = dsd.dimensions.length;
         var index = dsd.dimensions.indexOf("TIME_PERIOD");
         if (index === -1) {
-            dfNoTime.push({name: dfName, dimensions: dsd.dimensions});
+            dfNoTime.push({id: dfId, dimensions: dsd.dimensions});
             $("#NoTime").text(JSON.stringify(dfNoTime));
-            $("li." + dfName).removeClass("started").addClass("notime");
+            $("li." + dfId).removeClass("started").addClass("notime");
         }
         else if (index !== count - 1) {
-            dfTimeWrong.push({name: dfName, dimensions: dsd.dimensions});
+            dfTimeWrong.push({id: dfId, dimensions: dsd.dimensions});
             $("#TimeWrong").text(JSON.stringify(dfTimeWrong));
-            $("li." + dfName).removeClass("started").addClass("timewrong");
+            $("li." + dfId).removeClass("started").addClass("timewrong");
         }
         else {
-            dfOk.push(dfName);
+            dfOk.push(dfId);
             $("#OK").text(JSON.stringify(dfOk));
-            $("li." + dfName).removeClass("started").addClass("ok");
+            $("li." + dfId).removeClass("started").addClass("ok");
         }
     }
     function checkAll(error, dsd) {
@@ -65,33 +71,33 @@
         addSomewhere(intersect, intersects, dsd, "#intersects");
     }
     function addSomewhere(arr, collection, dsd, dom){
-        var codelistNames = dsd.codelists.map(function(codelist){return codelist.name;});
+        var codelistNames = dsd.codelists.map(function(codelist){return codelist.fldName;});
         arr.forEach(function(el){
-            var i = collection.map(function(e){return e.name}).indexOf(el);
+            var i = collection.map(function(e){return e.fldName}).indexOf(el);
             var j = codelistNames.indexOf(el);
             if (i === -1) {
                 i = collection.length;
-                collection.push({name: el, dfs: {codelist: [], noCodelist: []}});
+                collection.push({fldName: el, dfs: {codelist: [], noCodelist: []}});
             }
-            if (j > -1) collection[i].dfs.codelist.push(dsd.name);
-            else collection[i].dfs.noCodelist.push(dsd.name);
+            if (j > -1) collection[i].dfs.codelist.push(dsd.id);
+            else collection[i].dfs.noCodelist.push(dsd.id);
         });
         $(dom).text(JSON.stringify(collection));
     }
 
-    function checkAll_final(dfNames, dfError) {
+    function checkAll_final(dfIds, dfError) {
         var dfErrorNames = dfError.map(function (df) {return df.name});
-        addSomewhere_final(consOnly, dfNames, dfErrorNames, "#consOnly");
-        addSomewhere_final(dimsOnly, dfNames, dfErrorNames, "#dimsOnly");
-        addSomewhere_final(intersects, dfNames, dfErrorNames, "#intersects");
+        addSomewhere_final(consOnly, dfIds, dfErrorNames, "#consOnly");
+        addSomewhere_final(dimsOnly, dfIds, dfErrorNames, "#dimsOnly");
+        addSomewhere_final(intersects, dfIds, dfErrorNames, "#intersects");
     }
-    function addSomewhere_final(collection, dfNames, dfErrorNames, dom) {
+    function addSomewhere_final(collection, dfIds, dfErrorNames, dom) {
         collection.forEach(function (e) {
             e.dfsnot = [];
             var dfsnotCnt = 0;
-            dfNames.forEach(function (dfName) {
-                if (e.dfs.codelist.indexOf(dfName) === -1 && e.dfs.noCodelist.indexOf(dfName) === -1 && dfErrorNames.indexOf(dfName) === -1) {
-                    if (dfsnotCnt<100) e.dfsnot.push(dfName); //limit to 100.
+            dfIds.forEach(function (dfId) {
+                if (e.dfs.codelist.indexOf(dfId) === -1 && e.dfs.noCodelist.indexOf(dfId) === -1 && dfErrorNames.indexOf(dfId) === -1) {
+                    if (dfsnotCnt<100) e.dfsnot.push(dfId); //limit to 100.
                     else if (dsfnotCnt===100) e.dfsnot.push("...");
                     dfsnotCnt++;
                 }
@@ -99,18 +105,6 @@
             e.dfNotHaveCount = dfsnotCnt;
         });
 
-        $(dom).text(JSON.stringify(collection.map(function(e){return {name: e.name, dfHaveCountWithCodelist: e.dfs.codelist.length, dfHaveCountWithoutCodelist: e.dfs.noCodelist.length, dfNotCount: e.dfNotHaveCount, dfs: e.dfs, dfsnot: e.dfsnot}}), null, 2));
+        $(dom).text(JSON.stringify(collection.map(function(e){return {fldName: e.fldName, dfHaveCountWithCodelist: e.dfs.codelist.length, dfHaveCountWithoutCodelist: e.dfs.noCodelist.length, dfNotCount: e.dfNotHaveCount, dfs: e.dfs, dfsnot: e.dfsnot}}), null, 2));
     }
 }());
-/*$.ajax("dev/test1_conceptsThatAreNotDimensions.json").done(function(data){
- var d1= 0, d2= 0, d3=0;
- data.forEach(function(d){
- if (d.dfHaveCountWithoutCodelist) {
- if (d.dfHaveCountWithCodelist) d3++;
- else d2++;
- } else {
- if (d.dfHaveCountWithCodelist) d1++;
- }
- });
- alert (d1 + " " + d2 + " " + d3);
- });*/
