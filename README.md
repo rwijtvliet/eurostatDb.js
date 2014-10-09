@@ -45,6 +45,12 @@ so be sure to include those.
 
 Also, the file `all_latest_ESTAT_references=none_detail=full.xml` which contains the dataflow names and descriptions, must be located in the `js/` directory.
 
+## Bower
+
+Package is named `eurostat-db`. 
+
+Include the file `eurostatDb.js` in your project, and be sure to move/copy the file `all_latest_ESTAT_references=none_detail=full.xml` into your project's `js/` directory as mentioned above.
+
 
 ## Suggestions
 
