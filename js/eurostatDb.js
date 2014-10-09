@@ -90,29 +90,35 @@
  *      codelists: [
  *          {
  *              fldName: "fieldname",
- *              codes: [{id: "code", name:""}, ...]
+ *              codes: [{id: "codeId", name:"codeName"}, ...]
  *          }, ...  ],
- *      codesArr: function,  //see below
- *      codesDict: function   //see below
+ *      codes: function,     //see below
+ *      codeIds: function,   //see below
+ *      codeDict: function   //see below
  *  }
  * where
- *      codesArr()
- *          Code array for a certain field.
+ *      codes()
+ *          Codes array for a certain field.
  *          Arguments: name of field(/concepts/dimension) of which the list of possible codes is wanted.
- *          Return: the codes array for the specified field.
+ *          Return: array with code objects, i.e., [{id:"codeId1", name:"codeName1"}, {id:"codeId2", name:"codeName2"}, ...].
  *
- *      codesDict()
+ *      codeIds()
+ *          Code ids for a certain field.
+ *          Arguments: name of field(/concepts/dimension) of which the list of possible codes is wanted.
+ *          Return: array with code ids, i.e., ["codeId1", "codeId2", ...].
+ *
+ *      codeDict()
  *          Dictionary object with codes, and their names, that can be used/found for certain field.
  *          Arguments: (optional) name of field(/concept/dimension) of which the list of possible codes is wanted. If omitted: for all fieldnames.
  *          Return: if fieldname specified:  object with {id: name}, for each code in the field's codes array.
- *                  if fieldname omitted:    object with {fieldName: {id: name}}, for each fieldname in the codelist-array.
+ *                  if fieldname omitted:    object with {fieldName: {id: name}}, for each fieldname in the codelists-array.
  *
  *
  * table (tbl) object {
  *      id: "dataflowId",
  *      dsd: <<dsd object, see above>>,
  *      fixDims: ["field", ...],        //fields of which value was specified during table initialisation.
- *      fixDimFilter: {field1:"value1", field2:"value2", ...}, //Object of the fixed dimensions, and the values they are fixed to. See tblDef object, below.
+ *      fixDimFilter: {field1:"value1", field2:"value2", ...}, //Object of the fixed dimensions, and the values they are fixed to. See fixDimFilter object, below.
  *      varDims: ["field", ...],        //fields of which value must be specified in order to fetch data.
  *      fields: ["field", ...],         //fields which, if available, are stored for every record in database. Used when querying the data in the local database.
  *      fieldsInput: ["field", ...],    //subset of .fields, containing the fields that uniquely specify a datapoint.
@@ -240,8 +246,9 @@ function eurostatDb () {
                 .done(function (xml) {
                     var dsd = parseDsdXml(xml);
                     dsd.id = id;
-                    dsd.codesArr = codesArr;
-                    dsd.codesDict = codesDict;
+                    dsd.codes = codes;
+                    dsd.codeIds = codeIds;
+                    dsd.codeDict = codesDict;
                     resolve(dsd);
                 })
                 .fail(function (xhr, textStatus, error) {
@@ -259,8 +266,9 @@ function eurostatDb () {
                 dimensions: [],
                 concepts: [],
                 codelists: []
-                //codesArr, //added later
-                //codesDict //added later
+                //codes, //added later
+                //codeIds, //added later
+                //codeDict //added later
             },
             converter = new X2JS(),
             renameFldNames = {"Observation flag.": "OBS_FLAG", "Observation status.": "OBS_STATUS"};
@@ -302,11 +310,14 @@ function eurostatDb () {
         return dsd;
     }
 
-    function codesArr (fldName) {
+    function codes (fldName) {
         if (!fldName) throw Error("No fieldname specified");
         var codelist = this.codelists.filter(function (codelist) {return codelist.fldName === fldName;});
         if (!codelist.length) throw Error("Fieldname " + fldName + " not found");
         return codelist[0].codes;
+    }
+    function codeIds (fldName) {
+        return this.codes(fldName).map(function (code) {return code.id;});
     }
     function codesDict (fldName) {
         var dict = {};
@@ -388,7 +399,7 @@ function eurostatDb () {
 
                     //Get codelist for TIME: 1: get 'test record set'.
                     var varDimFilter = {};
-                    tbl.varDims.forEach(function (dim) {varDimFilter[dim] = tbl.dsd.codesArr(dim)[0].id;});
+                    tbl.varDims.forEach(function (dim) {varDimFilter[dim] = tbl.dsd.codeIds(dim)[0];});
                     return dataQ(tbl, varDimFilter);
                 })
                 .then(function (rst) {
@@ -601,8 +612,8 @@ function eurostatDb () {
         // individual properties, so if there are 3 properties with 4-element arrays each, there will be 64 (4^3) objects
         // in the returned array.
         // E.g. in: {prop1:[1,2], prop2:['a','b']} --> out: [{prop1:1, prop2:'a'}, {prop1:1, prop2:'b'}, ...]
-        var obj = $.extend({}, obj), //local copy to not affect input object.
-            keys = Object.keys(obj);
+        obj = $.extend({}, obj); //local copy to not affect input object.
+        var keys = Object.keys(obj);
 
         if (keys.length == 0) {
             return [{}];

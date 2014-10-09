@@ -51,7 +51,7 @@
         var varDimFilter = {};
         tbl.varDims.forEach(function(varDim){
             var val = [""];
-            var codes = Object.keys(tbl.dsd.codesDict(varDim));
+            var codes = Object.keys(tbl.dsd.codeDict(varDim));
             if (varDim === "PARTNER" || (varDim.indexOf("DECL") > -1) || (varDim.indexOf("INDICATOR") > -1)) val = ""; //all
             else if (varDim === "FREQ") val = codes;
             else val = codes[Math.floor(Math.random()*codes.length)]; //random
