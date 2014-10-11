@@ -248,7 +248,7 @@ function eurostatDb () {
                     dsd.id = id;
                     dsd.codes = codes;
                     dsd.codeIds = codeIds;
-                    dsd.codeDict = codesDict;
+                    dsd.codeDict = codeDict;
                     resolve(dsd);
                 })
                 .fail(function (xhr, textStatus, error) {
@@ -319,15 +319,14 @@ function eurostatDb () {
     function codeIds (fldName) {
         return this.codes(fldName).map(function (code) {return code.id;});
     }
-    function codesDict (fldName) {
-        var dict = {};
+    function codeDict (fldName) {
+        var dict = {},
+            that = this; //necessary to keep 'this' in recursive calls equal to dsd object. 
         if (!fldName) {
             var fldNames = this.codelists.map(function (codelist) {return codelist.fldName;});
-            fldNames.forEach(function (fldName) {dict[fldName] = codesDict(fldName)});
+            fldNames.forEach(function (fldName) {dict[fldName] = that.codeDict(fldName);});
         } else {
-            var codelist = this.codelists.filter(function (codelist) {return codelist.fldName === fldName;});
-            if (!codelist.length) throw Error("Fieldname " + fldName + " not found");
-            codelist[0].codes.forEach(function (code) {dict[code.id] = code.name;});
+            this.codes(fldName).forEach(function (code) {dict[code.id] = code.name;});
         }
         return dict;
     }
@@ -496,6 +495,7 @@ function eurostatDb () {
                 promises.push(fetchRegister[key]);
             });
 
+            if (inflight) progress(inflight);
             Q.all(promises)
                 .then(function () {resolve(fetchedData);})
                 .catch(reject);
