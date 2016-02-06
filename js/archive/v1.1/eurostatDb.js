@@ -1,6 +1,6 @@
 /**
  * eurostatDb.js
- * version 1.1: slightly optimized version of v1.0, should be drop-in replacement. Written in ES2015
+ * version 1.1: slightly optimized version of v1.0, should be drop-in replacement. Written in ES2015; ES5-version available as eurostatDb-es5.js
  *
  *
  * Created by ruud wijtvliet (rwijtvliet@gmail.com).
